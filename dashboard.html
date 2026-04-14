@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CCG Leader Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blue-deep: #0a1f44;
+      --blue-mid: #1a3a6b;
+      --blue-bright: #1e5fd4;
+      --blue-light: #e8f0fe;
+      --blue-pale: #f0f5ff;
+      --gold: #c9a84c;
+      --white: #ffffff;
+      --gray-soft: #f7f9fc;
+      --gray-text: #5a6a85;
+      --border: #d4e0f5;
+      --green: #1a8a5a;
+      --green-light: #e6f7f0;
+      --red: #c0392b;
+      --red-light: #fdecea;
+      --orange: #e67e22;
+      --orange-light: #fef5e7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--blue-pale);
+      min-height: 100vh;
+      color: var(--blue-deep);
+    }
+
+    /* ===== LOGIN SCREEN ===== */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 40px 32px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+      animation: popIn 0.5s ease both;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .login-cross {
+      font-size: 2.5rem;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .login-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--blue-deep);
+      margin-bottom: 4px;
+    }
+
+    .login-sub {
+      font-size: 0.82rem;
+      color: var(--gray-text);
+      margin-bottom: 28px;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      color: var(--blue-deep);
+      background: var(--gray-soft);
+      text-align: center;
+      letter-spacing: 0.1em;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .login-input:focus {
+      outline: none;
+      border-color: var(--blue-bright);
+      background: var(--white);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--blue-bright), var(--blue-mid));
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .login-btn:hover { opacity: 0.9; }
+
+    .login-error {
+      color: var(--red);
+      font-size: 0.82rem;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* ===== DASHBOARD ===== */
+    #dashboard { display: none; }
+
+    .dash-header {
+      background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+      padding: 28px 20px 24px;
+      text-align: center;
+      position: relative;
+    }
+
+    .dash-cross {
+      color: var(--gold);
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .dash-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--white);
+    }
+
+    .dash-sub {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.6);
+      margin-top: 4px;
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 20px; right: 16px;
+      background: rgba(255,255,255,0.12);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+    }
+
+    .dash-body {
+      padding: 20px 16px 48px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* ===== STAT CARDS ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 18px 16px;
+      box-shadow: 0 2px 12px rgba(10,31,68,0.07);
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.1s; }
+    .stat-card:nth-child(2) { animation-delay: 0.15s; }
+    .stat-card:nth-child(3) { animation-delay: 0.2s; }
+    .stat-card:nth-child(4) { animation-delay: 0.25s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .stat-icon { font-size: 1.6rem; margin-bottom: 8px; }
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--blue-deep);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--gray-text);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* ===== SECTION TITLE ===== */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--blue-deep);
+      margin-bottom: 12px;
+      padding-left: 4px;
+      border-left: 3px solid var(--gold);
+      padding-left: 10px;
+    }
+
+    /* ===== UNIT BARS ===== */
+    .units-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(10,31,68,0.07);
+      margin-bottom: 24px;
+      animation: fadeUp 0.5s 0.3s ease both;
+    }
+
+    .unit-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .unit-name {
+      font-size: 0.78rem;
+      color: var(--blue-deep);
+      width: 160px;
+      flex-shrink: 0;
+      font-weight: 500;
+    }
+
+    .unit-bar-wrap {
+      flex: 1;
+      background: var(--blue-light);
+      border-radius: 20px;
+      height: 10px;
+      overflow: hidden;
+    }
+
+    .unit-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue-bright), var(--blue-mid));
+      border-radius: 20px;
+      transition: width 1s ease;
+      width: 0%;
+    }
+
+    .unit-count {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--blue-bright);
+      width: 20px;
+      text-align: right;
+    }
+
+    /* ===== MEMBERS TABLE ===== */
+    .table-card {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(10,31,68,0.07);
+      overflow: hidden;
+      animation: fadeUp 0.5s 0.4s ease both;
+    }
+
+    .table-header {
+      background: var(--blue-deep);
+      color: var(--white);
+      padding: 14px 16px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-scroll { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 500px;
+      font-size: 0.82rem;
+    }
+
+    thead tr {
+      background: var(--blue-light);
+    }
+
+    thead th {
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--blue-mid);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover { background: var(--blue-pale); }
+
+    tbody td {
+      padding: 10px 12px;
+      color: var(--blue-deep);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .badge-member { background: var(--blue-light); color: var(--blue-bright); }
+    .badge-worker { background: var(--green-light); color: var(--green); }
+    .badge-visitor { background: var(--orange-light); color: var(--orange); }
+    .badge-first { background: #fef9e7; color: #b7950b; }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray-text);
+      font-size: 0.88rem;
+    }
+
+    /* ===== LOADING ===== */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray-text);
+      font-size: 0.88rem;
+    }
+
+    .spinner-inline {
+      display: inline-block;
+      width: 20px; height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--blue-bright);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .refresh-btn {
+      background: var(--blue-light);
+      color: var(--blue-bright);
+      border: none;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="loginScreen">
+  <div class="login-card">
+    <span class="login-cross">✝</span>
+    <h1 class="login-title">Leader Dashboard</h1>
+    <p class="login-sub">City Citadel of Grace Family</p>
+    <input type="password" class="login-input" id="passwordInput" placeholder="Enter password" onkeydown="if(event.key==='Enter') login()"/>
+    <button class="login-btn" onclick="login()">Access Dashboard</button>
+    <p class="login-error" id="loginError">⚠️ Incorrect password. Try again.</p>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="dashboard">
+
+  <div class="dash-header">
+    <span class="dash-cross">✝</span>
+    <h1 class="dash-title">Leader Dashboard</h1>
+    <p class="dash-sub">City Citadel of Grace Family</p>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value" id="totalCount">—</div>
+        <div class="stat-label">Total Registered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🙏</div>
+        <div class="stat-value" id="memberCount">—</div>
+        <div class="stat-label">Members</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚙️</div>
+        <div class="stat-value" id="workerCount">—</div>
+        <div class="stat-label">Workers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌱</div>
+        <div class="stat-value" id="firstTimerCount">—</div>
+        <div class="stat-label">First Timers</div>
+      </div>
+    </div>
+
+    <!-- Unit Breakdown -->
+    <p class="section-title">Service Unit Breakdown</p>
+    <div class="units-card" id="unitsCard">
+      <div class="loading"><span class="spinner-inline"></span> Loading units...</div>
+    </div>
+
+    <!-- Members Table -->
+    <p class="section-title">All Registrations</p>
+    <div class="table-card">
+      <div class="table-header">
+        <span id="tableCount">Loading...</span>
+        <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Type</th>
+              <th>Unit</th>
+              <th>Role</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr><td colspan="7"><div class="loading"><span class="spinner-inline"></span> Loading...</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ===== CONFIG =====
+  const PASSWORD = "ccg2025";
+
+  // REPLACE with your Google Sheet published CSV URL
+  // (Instructions below on how to get this)
+  const SHEET_CSV_URL = "YOUR_GOOGLE_SHEET_CSV_URL_HERE";
+
+  // ===== LOGIN =====
+  function login() {
+    const val = document.getElementById('passwordInput').value;
+    if (val === PASSWORD) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadData();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('passwordInput').value = '';
+    }
+  }
+
+  function logout() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('passwordInput').value = '';
+  }
+
+  // ===== LOAD DATA FROM SHEET =====
+  async function loadData() {
+    try {
+      const res = await fetch(SHEET_CSV_URL);
+      const text = await res.text();
+      const rows = parseCSV(text);
+
+      if (rows.length < 2) {
+        showEmpty();
+        return;
+      }
+
+      const data = rows.slice(1).filter(r => r[1]); // skip header, skip empty rows
+
+      renderStats(data);
+      renderUnits(data);
+      renderTable(data);
+
+    } catch (err) {
+      document.getElementById('tableBody').innerHTML =
+        `<tr><td colspan="7"><div class="empty-state">⚠️ Could not load data. Make sure your Sheet CSV URL is set correctly.</div></td></tr>`;
+    }
+  }
+
+  // ===== PARSE CSV =====
+  function parseCSV(text) {
+    return text.split('\n').map(row => {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < row.length; i++) {
+        if (row[i] === '"') { inQuotes = !inQuotes; }
+        else if (row[i] === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
+        else { current += row[i]; }
+      }
+      result.push(current.trim());
+      return result;
+    });
+  }
+
+  // ===== RENDER STATS =====
+  function renderStats(data) {
+    const total = data.length;
+    const members = data.filter(r => r[4] === 'Member').length;
+    const workers = data.filter(r => r[4] === 'Worker').length;
+    const firstTimers = data.filter(r => r[4] === 'First Timer').length;
+
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('memberCount').textContent = members;
+    document.getElementById('workerCount').textContent = workers;
+    document.getElementById('firstTimerCount').textContent = firstTimers;
+  }
+
+  // ===== RENDER UNITS =====
+  function renderUnits(data) {
+    const units = [
+      'Choir / Music Team', 'Instrumentalists / Band', 'Media & Projection',
+      'Drama & Creative Arts', 'Protocol / Ushering', 'Hospitality & Welfare',
+      'Decoration & Aesthetics', 'Prayer & Intercession', 'Word & Bible Study',
+      'Evangelism & Outreach', 'Discipleship & Follow-up',
+      "Children's Church / Sunday School", 'Youth Ministry', "Women's Ministry",
+      "Men's Ministry", 'Finance & Stewardship', 'Security',
+      'Social Media & Communications', 'Photography & Videography', 'IT & Technical Support'
+    ];
+
+    const counts = {};
+    units.forEach(u => counts[u] = 0);
+    data.forEach(r => { if (counts[r[5]] !== undefined) counts[r[5]]++; });
+
+    const max = Math.max(...Object.values(counts), 1);
+    const active = units.filter(u => counts[u] > 0);
+
+    if (active.length === 0) {
+      document.getElementById('unitsCard').innerHTML = '<div class="empty-state">No unit assignments yet.</div>';
+      return;
+    }
+
+    let html = '';
+    active.sort((a, b) => counts[b] - counts[a]).forEach(u => {
+      const pct = Math.round((counts[u] / max) * 100);
+      html += `
+        <div class="unit-row">
+          <div class="unit-name">${u}</div>
+          <div class="unit-bar-wrap"><div class="unit-bar" style="width:${pct}%"></div></div>
+          <div class="unit-count">${counts[u]}</div>
+        </div>`;
+    });
+
+    document.getElementById('unitsCard').innerHTML = html;
+  }
+
+  // ===== RENDER TABLE =====
+  function renderTable(data) {
+    document.getElementById('tableCount').textContent = `${data.length} Registration${data.length !== 1 ? 's' : ''}`;
+
+    if (data.length === 0) {
+      document.getElementById('tableBody').innerHTML =
+        `<tr><td colspan="7"><div class="empty-state">No registrations yet.</div></td></tr>`;
+      return;
+    }
+
+    const badgeClass = {
+      'Member': 'badge-member',
+      'Worker': 'badge-worker',
+      'Regular Visitor': 'badge-visitor',
+      'First Timer': 'badge-first'
+    };
+
+    let html = '';
+    data.forEach((r, i) => {
+      const type = r[4] || '';
+      const badge = badgeClass[type] || 'badge-member';
+      html += `
+        <tr>
+          <td>${i + 1}</td>
+          <td><strong>${r[1] || '—'}</strong></td>
+          <td>${r[2] || '—'}</td>
+          <td><span class="badge ${badge}">${type || '—'}</span></td>
+          <td>${r[5] || '—'}</td>
+          <td>${r[6] || '—'}</td>
+          <td>${r[8] || '—'}</td>
+        </tr>`;
+    });
+
+    document.getElementById('tableBody').innerHTML = html;
+  }
+
+  function showEmpty() {
+    document.getElementById('totalCount').textContent = '0';
+    document.getElementById('memberCount').textContent = '0';
+    document.getElementById('workerCount').textContent = '0';
+    document.getElementById('firstTimerCount').textContent = '0';
+    document.getElementById('unitsCard').innerHTML = '<div class="empty-state">No registrations yet.</div>';
+    document.getElementById('tableBody').innerHTML =
+      `<tr><td colspan="7"><div class="empty-state">No registrations yet.</div></td></tr>`;
+    document.getElementById('tableCount').textContent = '0 Registrations';
+  }
+</script>
+
+</body>
+</html>
