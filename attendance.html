@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CCG Attendance Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blue-deep: #0a1f44;
+      --blue-mid: #1a3a6b;
+      --blue-bright: #1e5fd4;
+      --blue-light: #e8f0fe;
+      --blue-pale: #f0f5ff;
+      --gold: #c9a84c;
+      --white: #ffffff;
+      --gray-soft: #f7f9fc;
+      --gray-text: #5a6a85;
+      --border: #d4e0f5;
+      --green: #1a8a5a;
+      --green-light: #e6f7f0;
+      --red: #c0392b;
+      --red-light: #fdecea;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--blue-pale);
+      min-height: 100vh;
+      color: var(--blue-deep);
+    }
+
+    /* === HEADER === */
+    .site-header {
+      background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+      padding: 28px 20px 24px;
+      text-align: center;
+    }
+
+    .header-cross { color: var(--gold); font-size: 1.6rem; display: block; margin-bottom: 6px; }
+    .header-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--white); }
+    .header-sub { font-size: 0.78rem; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+    /* === BODY === */
+    .body-wrap {
+      max-width: 640px;
+      margin: 24px auto 48px;
+      padding: 0 16px;
+    }
+
+    /* === LOGIN === */
+    #loginSection {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 32px 24px;
+      box-shadow: 0 4px 24px rgba(10,31,68,0.09);
+      text-align: center;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+    .login-sub { font-size: 0.82rem; color: var(--gray-text); margin-bottom: 20px; }
+
+    .login-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      background: var(--gray-soft);
+      color: var(--blue-deep);
+      text-align: center;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+    .login-input:focus { outline: none; border-color: var(--blue-bright); }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--blue-bright), var(--blue-mid));
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .login-error { color: var(--red); font-size: 0.82rem; margin-top: 8px; display: none; }
+
+    /* === TRACKER === */
+    #trackerSection { display: none; animation: fadeUp 0.5s ease both; }
+
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(10,31,68,0.09);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .card-head {
+      background: var(--blue-light);
+      padding: 12px 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue-bright);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-body { padding: 20px; }
+
+    /* === DATE & WORKER === */
+    .field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--blue-deep); }
+    label span { color: #e05252; }
+
+    input[type="date"], input[type="text"] {
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--blue-deep);
+      background: var(--gray-soft);
+      width: 100%;
+    }
+    input:focus { outline: none; border-color: var(--blue-bright); background: var(--white); }
+
+    /* === SUMMARY BAR === */
+    .summary-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .summary-pill {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .pill-total { background: var(--blue-light); color: var(--blue-bright); }
+    .pill-present { background: var(--green-light); color: var(--green); }
+    .pill-absent { background: var(--red-light); color: var(--red); }
+
+    /* === SEARCH === */
+    .search-wrap { margin-bottom: 14px; position: relative; }
+    .search-wrap input {
+      padding-left: 36px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235a6a85' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 12px center;
+    }
+
+    /* === MEMBER LIST === */
+    .member-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .member-item:last-child { border-bottom: none; }
+
+    .member-name { font-size: 0.9rem; font-weight: 500; color: var(--blue-deep); }
+    .member-unit { font-size: 0.73rem; color: var(--gray-text); margin-top: 2px; }
+
+    .toggle-wrap { display: flex; gap: 6px; }
+
+    .att-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1.5px solid var(--border);
+      background: var(--gray-soft);
+      color: var(--gray-text);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .att-btn.present-active {
+      background: var(--green-light);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .att-btn.absent-active {
+      background: var(--red-light);
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    /* === SUBMIT === */
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--blue-bright), var(--blue-mid));
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .submit-btn:hover { opacity: 0.9; }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* === SUCCESS === */
+    #successSection {
+      display: none;
+      background: var(--white);
+      border-radius: 20px;
+      padding: 48px 24px;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(10,31,68,0.09);
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .success-icon { font-size: 3rem; margin-bottom: 12px; }
+    .success-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 8px; }
+    .success-msg { font-size: 0.88rem; color: var(--gray-text); line-height: 1.6; }
+
+    .new-btn {
+      margin-top: 20px;
+      padding: 12px 28px;
+      background: var(--blue-light);
+      color: var(--blue-bright);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* === LOADING === */
+    .loading { text-align: center; padding: 30px; color: var(--gray-text); font-size: 0.88rem; }
+    .spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2px solid var(--border);
+      border-top-color: var(--blue-bright);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .footer { text-align: center; padding: 16px; font-size: 0.73rem; color: #8a9bb5; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="header-cross">✝</span>
+    <h1 class="header-title">Attendance Tracker</h1>
+    <p class="header-sub">City Citadel of Grace Family</p>
+  </header>
+
+  <div class="body-wrap">
+
+    <!-- LOGIN -->
+    <div id="loginSection">
+      <h2 class="login-title">Worker Access</h2>
+      <p class="login-sub">Enter the password to mark attendance</p>
+      <input type="password" class="login-input" id="loginInput" placeholder="Enter password" onkeydown="if(event.key==='Enter') doLogin()"/>
+      <button class="login-btn" onclick="doLogin()">Access Tracker</button>
+      <p class="login-error" id="loginError">⚠️ Incorrect password. Try again.</p>
+    </div>
+
+    <!-- TRACKER -->
+    <div id="trackerSection">
+
+      <!-- Date & Worker -->
+      <div class="card">
+        <div class="card-head">Session Details</div>
+        <div class="card-body">
+          <div class="field-group">
+            <label for="serviceDate">Service Date <span>*</span></label>
+            <input type="date" id="serviceDate"/>
+          </div>
+          <div class="field-group">
+            <label for="workerName">Your Name (Submitted By) <span>*</span></label>
+            <input type="text" id="workerName" placeholder="e.g. Emmanuel Johnson"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Members List -->
+      <div class="card">
+        <div class="card-head">Mark Attendance</div>
+        <div class="card-body">
+
+          <div class="summary-bar">
+            <div class="summary-pill pill-total">Total: <span id="totalCount">0</span></div>
+            <div class="summary-pill pill-present">Present: <span id="presentCount">0</span></div>
+            <div class="summary-pill pill-absent">Absent: <span id="absentCount">0</span></div>
+          </div>
+
+          <div class="search-wrap">
+            <input type="text" id="searchInput" placeholder="Search member..." oninput="filterMembers()"/>
+          </div>
+
+          <div id="memberList">
+            <div class="loading"><span class="spinner"></span> Loading members...</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button class="submit-btn" id="submitBtn" onclick="submitAttendance()">✅ Submit Attendance</button>
+
+    </div>
+
+    <!-- SUCCESS -->
+    <div id="successSection">
+      <div class="success-icon">✅</div>
+      <h2 class="success-title">Attendance Saved!</h2>
+      <p class="success-msg" id="successMsg">Attendance has been recorded successfully.</p>
+      <button class="new-btn" onclick="resetTracker()">📋 Mark Another Session</button>
+    </div>
+
+  </div>
+
+  <footer class="footer">© 2025 City Citadel of Grace Family</footer>
+
+  <script>
+    const PASSWORD = "ccg2025";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyoKyf28Nj-hb1hFY-cJOrGNKsbiwBpbcgfedN_-2bPCKwINREzVsQqOynFyf3aWglucg/exec";
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTjS0CYGXuufT2qEkXZHVKpTlfuWST2F09bcHXcwKvl5QnrqF2t5eR92q3FYPfAh2ZdwlkdesENmRst/pub?gid=0&single=true&output=csv";
+
+    let allMembers = [];
+    let attendance = {}; // { name: 'Present' | 'Absent' }
+
+    // === LOGIN ===
+    function doLogin() {
+      const val = document.getElementById('loginInput').value;
+      if (val === PASSWORD) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('trackerSection').style.display = 'block';
+        // Set today's date
+        document.getElementById('serviceDate').value = new Date().toISOString().split('T')[0];
+        loadMembers();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('loginInput').value = '';
+      }
+    }
+
+    // === LOAD MEMBERS ===
+    async function loadMembers() {
+      try {
+        const res = await fetch(SHEET_CSV_URL);
+        const text = await res.text();
+        const rows = text.split('\n').map(r => r.split(','));
+        allMembers = rows.slice(1)
+          .filter(r => r[1] && r[1].trim())
+          .map(r => ({ name: r[1].trim().replace(/"/g,''), unit: (r[5] || '').trim().replace(/"/g,'') }));
+
+        allMembers.forEach(m => { attendance[m.name] = 'Absent'; });
+        document.getElementById('totalCount').textContent = allMembers.length;
+        renderMembers(allMembers);
+        updateCounts();
+      } catch (err) {
+        document.getElementById('memberList').innerHTML = '<div class="loading">⚠️ Could not load members.</div>';
+      }
+    }
+
+    // === RENDER MEMBERS ===
+    function renderMembers(members) {
+      if (members.length === 0) {
+        document.getElementById('memberList').innerHTML = '<div class="loading">No members found.</div>';
+        return;
+      }
+
+      let html = '';
+      members.forEach(m => {
+        const isPresent = attendance[m.name] === 'Present';
+        const isAbsent = attendance[m.name] === 'Absent';
+        html += `
+          <div class="member-item" id="item-${CSS.escape(m.name)}">
+            <div>
+              <div class="member-name">${m.name}</div>
+              <div class="member-unit">${m.unit || 'No unit'}</div>
+            </div>
+            <div class="toggle-wrap">
+              <button class="att-btn ${isPresent ? 'present-active' : ''}"
+                onclick="mark('${m.name.replace(/'/g,"\\'")}', 'Present')">✓ Present</button>
+              <button class="att-btn ${isAbsent ? 'absent-active' : ''}"
+                onclick="mark('${m.name.replace(/'/g,"\\'")}', 'Absent')">✗ Absent</button>
+            </div>
+          </div>`;
+      });
+
+      document.getElementById('memberList').innerHTML = html;
+    }
+
+    // === MARK ATTENDANCE ===
+    function mark(name, status) {
+      attendance[name] = status;
+      updateCounts();
+      // Re-render just the visible list
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allMembers.filter(m => m.name.toLowerCase().includes(search));
+      renderMembers(filtered);
+    }
+
+    // === UPDATE COUNTS ===
+    function updateCounts() {
+      const present = Object.values(attendance).filter(v => v === 'Present').length;
+      const absent = Object.values(attendance).filter(v => v === 'Absent').length;
+      document.getElementById('presentCount').textContent = present;
+      document.getElementById('absentCount').textContent = absent;
+    }
+
+    // === FILTER ===
+    function filterMembers() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allMembers.filter(m => m.name.toLowerCase().includes(search));
+      renderMembers(filtered);
+    }
+
+    // === SUBMIT ===
+    async function submitAttendance() {
+      const date = document.getElementById('serviceDate').value;
+      const submittedBy = document.getElementById('workerName').value.trim();
+
+      if (!date) { alert('Please select a service date.'); return; }
+      if (!submittedBy) { alert('Please enter your name.'); return; }
+      if (allMembers.length === 0) { alert('No members loaded.'); return; }
+
+      const records = allMembers.map(m => ({ name: m.name, status: attendance[m.name] || 'Absent' }));
+
+      document.getElementById('submitBtn').disabled = true;
+      document.getElementById('submitBtn').textContent = '⏳ Submitting...';
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'attendance', date, submittedBy, records })
+        });
+
+        const present = records.filter(r => r.status === 'Present').length;
+        document.getElementById('trackerSection').style.display = 'none';
+        document.getElementById('successSection').style.display = 'block';
+        document.getElementById('successMsg').textContent =
+          `${present} present out of ${allMembers.length} members recorded for ${date}.`;
+
+      } catch (err) {
+        alert('Submission failed. Please check your connection.');
+        document.getElementById('submitBtn').disabled = false;
+        document.getElementById('submitBtn').textContent = '✅ Submit Attendance';
+      }
+    }
+
+    // === RESET ===
+    function resetTracker() {
+      allMembers.forEach(m => { attendance[m.name] = 'Absent'; });
+      document.getElementById('workerName').value = '';
+      document.getElementById('serviceDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('successSection').style.display = 'none';
+      document.getElementById('trackerSection').style.display = 'block';
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').textContent = '✅ Submit Attendance';
+      updateCounts();
+      renderMembers(allMembers);
+    }
+  </script>
+
+</body>
+</html>
