@@ -21,446 +21,231 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--blue-deep); overflow-x: hidden; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--white);
-      color: var(--blue-deep);
-      overflow-x: hidden;
-    }
-
-    /* === NAV === */
+    /* NAV */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: rgba(10,31,68,0.97);
-      backdrop-filter: blur(8px);
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,31,68,0.97); backdrop-filter: blur(8px);
+      padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;
     }
-
-    .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      color: var(--white);
-      line-height: 1.2;
-    }
-
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--white); }
     .nav-logo span { color: var(--gold); }
-
-    .nav-links {
-      display: flex;
-      gap: 6px;
-    }
-
-    .nav-link {
-      padding: 7px 12px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: rgba(255,255,255,0.8);
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-
+    .nav-links { display: flex; gap: 6px; }
+    .nav-link { padding: 7px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.8); text-decoration: none; transition: background 0.2s; white-space: nowrap; }
     .nav-link:hover { background: rgba(255,255,255,0.1); color: var(--white); }
-    .nav-link.primary {
-      background: var(--gold);
-      color: var(--blue-deep);
-    }
-    .nav-link.primary:hover { background: #d4a840; }
+    .nav-link.gold { background: var(--gold); color: var(--blue-deep); }
+    .nav-link.gold:hover { background: #d4a840; }
 
-    /* === HERO === */
+    /* HERO */
     .hero {
       min-height: 100vh;
       background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue-mid) 55%, #1a4a8a 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 100px 24px 60px;
-      position: relative;
-      overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 110px 24px 70px; position: relative; overflow: hidden;
     }
+    .hero::before { content:''; position:absolute; top:-120px; right:-100px; width:420px; height:420px; border-radius:50%; background:rgba(201,168,76,0.06); pointer-events:none; }
+    .hero::after { content:''; position:absolute; bottom:-100px; left:-80px; width:320px; height:320px; border-radius:50%; background:rgba(255,255,255,0.03); pointer-events:none; }
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -100px; right: -100px;
-      width: 400px; height: 400px;
-      border-radius: 50%;
-      background: rgba(201,168,76,0.06);
-    }
+    .hero-cross { font-size:3rem; color:var(--gold); display:block; margin-bottom:20px; animation:fadeDown 0.5s ease both; }
+    .hero-eyebrow { font-size:0.72rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; animation:fadeDown 0.6s ease both; }
+    .hero-title { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,8vw,3.6rem); color:var(--white); line-height:1.15; margin-bottom:18px; animation:fadeDown 0.7s ease both; }
+    .hero-title em { color:var(--gold); font-style:italic; }
+    .hero-motto { font-size:clamp(0.9rem,3vw,1.1rem); color:rgba(255,255,255,0.75); font-style:italic; margin-bottom:6px; animation:fadeDown 0.8s ease both; }
+    .hero-verse { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-bottom:36px; animation:fadeDown 0.85s ease both; }
+    .hero-divider { width:48px; height:3px; background:var(--gold); border-radius:2px; margin:0 auto 36px; animation:growW 1s ease both; }
+    .hero-btns { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:fadeUp 1s ease both; }
+    .hero-scroll { position:absolute; bottom:28px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.35); font-size:0.72rem; letter-spacing:0.05em; animation:bounce 2s infinite; }
 
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -80px; left: -80px;
-      width: 300px; height: 300px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.04);
-    }
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes growW { from{width:0} to{width:48px} }
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
 
-    .hero-cross {
-      font-size: 3rem;
-      color: var(--gold);
-      display: block;
-      margin-bottom: 20px;
-      animation: fadeDown 0.6s ease both;
-    }
+    /* BUTTONS */
+    .btn { padding:14px 28px; border-radius:12px; font-weight:700; font-size:0.92rem; text-decoration:none; transition:opacity 0.2s, transform 0.15s; display:inline-block; }
+    .btn:hover { opacity:0.9; transform:translateY(-2px); }
+    .btn-gold { background:var(--gold); color:var(--blue-deep); }
+    .btn-outline { background:rgba(255,255,255,0.1); color:var(--white); border:1.5px solid rgba(255,255,255,0.3); }
 
-    .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 7vw, 3.2rem);
-      color: var(--white);
-      line-height: 1.2;
-      margin-bottom: 16px;
-      animation: fadeDown 0.7s ease both;
-    }
+    /* SECTIONS */
+    section { padding:68px 24px; }
+    .section-inner { max-width:660px; margin:0 auto; }
+    .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+    .section-title { font-family:'Playfair Display',serif; font-size:clamp(1.5rem,5vw,2.1rem); color:var(--blue-deep); margin-bottom:16px; line-height:1.3; }
+    .section-text { font-size:0.93rem; color:var(--gray-text); line-height:1.85; }
+    .gold-bar { width:40px; height:3px; background:var(--gold); border-radius:2px; margin-bottom:20px; }
 
-    .hero-title span { color: var(--gold); font-style: italic; }
+    /* WELCOME STRIP */
+    .welcome-strip { background:var(--blue-deep); padding:28px 24px; text-align:center; }
+    .welcome-strip p { font-size:1rem; color:rgba(255,255,255,0.85); font-style:italic; line-height:1.7; max-width:560px; margin:0 auto; }
+    .welcome-strip strong { color:var(--gold); font-style:normal; }
 
-    .hero-motto {
-      font-size: clamp(0.9rem, 3vw, 1.1rem);
-      color: rgba(255,255,255,0.7);
-      font-style: italic;
-      margin-bottom: 12px;
-      animation: fadeDown 0.8s ease both;
-    }
+    /* ABOUT */
+    .about-section { background:var(--white); }
+    .values-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:28px; }
+    .value-card { background:var(--blue-pale); border-radius:16px; padding:20px 16px; border-left:3px solid var(--gold); }
+    .value-icon { font-size:1.5rem; margin-bottom:8px; }
+    .value-title { font-weight:700; font-size:0.88rem; color:var(--blue-deep); margin-bottom:4px; }
+    .value-text { font-size:0.76rem; color:var(--gray-text); line-height:1.6; }
 
-    .hero-verse {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 36px;
-      animation: fadeDown 0.85s ease both;
-    }
+    /* HISTORY */
+    .history-section { background:var(--blue-pale); }
+    .history-card { background:var(--white); border-radius:20px; padding:28px 24px; box-shadow:0 4px 20px rgba(10,31,68,0.07); margin-top:24px; border-top:4px solid var(--gold); }
+    .history-year { display:inline-block; background:var(--blue-deep); color:var(--gold); font-family:'Playfair Display',serif; font-size:1rem; padding:4px 14px; border-radius:20px; margin-bottom:14px; }
+    .history-text { font-size:0.9rem; color:var(--gray-text); line-height:1.9; }
+    .history-text+.history-text { margin-top:14px; }
+    .history-quote { margin-top:20px; padding:16px 20px; background:var(--blue-pale); border-left:3px solid var(--gold); border-radius:0 12px 12px 0; font-style:italic; font-size:0.88rem; color:var(--blue-mid); }
 
-    .hero-divider {
-      width: 48px; height: 3px;
-      background: var(--gold);
-      border-radius: 2px;
-      margin: 0 auto 36px;
-      animation: expandW 0.9s ease both;
-    }
+    /* LEADERSHIP */
+    .leadership-section { background:var(--white); }
+    .leader-card { background:linear-gradient(135deg,var(--blue-deep),var(--blue-mid)); border-radius:20px; padding:32px 24px; text-align:center; margin-top:24px; position:relative; overflow:hidden; }
+    .leader-card::before { content:''; position:absolute; top:-40px; right:-40px; width:160px; height:160px; border-radius:50%; background:rgba(201,168,76,0.08); }
+    .leader-avatar { width:80px; height:80px; border-radius:50%; background:rgba(255,255,255,0.1); border:3px solid var(--gold); display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 16px; }
+    .leader-name { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--white); margin-bottom:4px; }
+    .leader-title { font-size:0.78rem; color:var(--gold); font-weight:600; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:14px; }
+    .leader-text { font-size:0.85rem; color:rgba(255,255,255,0.7); line-height:1.7; max-width:480px; margin:0 auto; }
 
-    @keyframes expandW { from { width: 0; } to { width: 48px; } }
+    /* SERVICES */
+    .services-section { background:var(--blue-pale); }
+    .service-list { display:flex; flex-direction:column; gap:14px; margin-top:24px; }
+    .service-card { background:var(--white); border-radius:16px; padding:20px; display:flex; align-items:center; gap:16px; box-shadow:0 2px 12px rgba(10,31,68,0.06); }
+    .service-icon-box { width:54px; height:54px; border-radius:14px; background:var(--blue-deep); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+    .service-day { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--blue-deep); }
+    .service-time { font-size:0.82rem; color:var(--gold); font-weight:700; margin:2px 0; }
+    .service-desc { font-size:0.76rem; color:var(--gray-text); }
 
-    .hero-btns {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-      animation: fadeUp 1s ease both;
-    }
+    /* GIVING */
+    .giving-section { background:var(--white); }
+    .giving-card { background:linear-gradient(135deg,var(--blue-deep) 0%,var(--blue-mid) 100%); border-radius:20px; padding:32px 24px; margin-top:24px; text-align:center; position:relative; overflow:hidden; }
+    .giving-card::after { content:''; position:absolute; bottom:-60px; right:-60px; width:200px; height:200px; border-radius:50%; background:rgba(201,168,76,0.08); }
+    .giving-title { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--white); margin-bottom:6px; }
+    .giving-verse { font-size:0.78rem; color:rgba(255,255,255,0.5); font-style:italic; margin-bottom:24px; }
+    .giving-details { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:14px; padding:20px; margin-bottom:16px; }
+    .giving-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.08); }
+    .giving-row:last-child { border-bottom:none; }
+    .giving-label { font-size:0.75rem; color:rgba(255,255,255,0.55); text-align:left; }
+    .giving-value { font-size:0.92rem; font-weight:700; color:var(--white); text-align:right; }
+    .giving-value.gold-num { color:var(--gold); font-size:1.1rem; letter-spacing:0.05em; }
+    .copy-btn { background:var(--gold); color:var(--blue-deep); border:none; border-radius:10px; padding:11px 24px; font-family:'DM Sans',sans-serif; font-size:0.85rem; font-weight:700; cursor:pointer; transition:opacity 0.2s; }
+    .copy-btn:hover { opacity:0.88; }
+    .copy-note { font-size:0.72rem; color:rgba(255,255,255,0.4); margin-top:10px; }
 
-    .btn-primary {
-      padding: 14px 28px;
-      background: var(--gold);
-      color: var(--blue-deep);
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      text-decoration: none;
-      transition: opacity 0.2s, transform 0.15s;
-    }
+    /* LOCATION */
+    .location-section { background:var(--blue-pale); }
+    .location-card { background:var(--blue-deep); border-radius:20px; padding:32px 24px; margin-top:24px; text-align:center; }
+    .location-icon { font-size:2.5rem; margin-bottom:12px; }
+    .location-name { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--white); margin-bottom:8px; }
+    .location-addr { font-size:0.88rem; color:rgba(255,255,255,0.65); line-height:1.7; margin-bottom:20px; }
+    .location-times { background:rgba(255,255,255,0.07); border-radius:12px; padding:14px 16px; margin-bottom:20px; }
+    .location-times p { font-size:0.8rem; color:rgba(255,255,255,0.7); margin-bottom:4px; }
+    .location-times p:last-child { margin-bottom:0; }
+    .location-times strong { color:var(--gold); }
+    .map-btn { display:inline-block; padding:11px 24px; background:var(--gold); color:var(--blue-deep); border-radius:10px; font-weight:700; font-size:0.85rem; text-decoration:none; transition:opacity 0.2s; }
+    .map-btn:hover { opacity:0.88; }
 
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+    /* NEW HERE */
+    .newhere-section { background:var(--white); }
+    .newhere-card { background:var(--gold-light); border:2px solid var(--gold); border-radius:20px; padding:32px 24px; text-align:center; margin-top:24px; }
+    .newhere-icon { font-size:2.5rem; margin-bottom:12px; }
+    .newhere-title { font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--blue-deep); margin-bottom:10px; }
+    .newhere-text { font-size:0.88rem; color:var(--gray-text); line-height:1.7; margin-bottom:22px; }
 
-    .btn-secondary {
-      padding: 14px 28px;
-      background: rgba(255,255,255,0.1);
-      color: var(--white);
-      border: 1.5px solid rgba(255,255,255,0.3);
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
+    /* FOOTER */
+    footer { background:var(--blue-deep); padding:40px 24px 28px; text-align:center; }
+    .footer-cross { color:var(--gold); font-size:2rem; display:block; margin-bottom:10px; }
+    .footer-name { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--white); margin-bottom:6px; }
+    .footer-motto { font-size:0.78rem; color:rgba(255,255,255,0.45); font-style:italic; margin-bottom:20px; }
+    .footer-links { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:20px; }
+    .footer-link { font-size:0.78rem; color:rgba(255,255,255,0.5); text-decoration:none; transition:color 0.2s; }
+    .footer-link:hover { color:var(--gold); }
+    .footer-divider { width:32px; height:2px; background:var(--gold); margin:0 auto 16px; border-radius:2px; }
+    .footer-copy { font-size:0.7rem; color:rgba(255,255,255,0.28); }
 
-    .btn-secondary:hover { background: rgba(255,255,255,0.18); }
-
-    .hero-scroll {
-      position: absolute;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: rgba(255,255,255,0.4);
-      font-size: 0.75rem;
-      animation: bounce 2s infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(6px); }
-    }
-
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* === SECTIONS === */
-    section { padding: 64px 24px; }
-
-    .section-inner {
-      max-width: 640px;
-      margin: 0 auto;
-    }
-
-    .section-tag {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 8px;
-    }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.5rem, 5vw, 2rem);
-      color: var(--blue-deep);
-      margin-bottom: 16px;
-      line-height: 1.3;
-    }
-
-    .section-text {
-      font-size: 0.95rem;
-      color: var(--gray-text);
-      line-height: 1.8;
-    }
-
-    .gold-line {
-      width: 40px; height: 3px;
-      background: var(--gold);
-      border-radius: 2px;
-      margin-bottom: 20px;
-    }
-
-    /* === ABOUT === */
-    .about-section { background: var(--white); }
-
-    .about-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 28px;
-    }
-
-    .about-card {
-      background: var(--blue-pale);
-      border-radius: 16px;
-      padding: 20px 16px;
-      border-left: 3px solid var(--gold);
-    }
-
-    .about-card-icon { font-size: 1.6rem; margin-bottom: 8px; }
-    .about-card-title {
-      font-weight: 700;
-      font-size: 0.88rem;
-      color: var(--blue-deep);
-      margin-bottom: 4px;
-    }
-    .about-card-text { font-size: 0.78rem; color: var(--gray-text); line-height: 1.6; }
-
-    /* === SERVICES === */
-    .services-section { background: var(--blue-pale); }
-
-    .service-list { margin-top: 24px; display: flex; flex-direction: column; gap: 14px; }
-
-    .service-item {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      box-shadow: 0 2px 12px rgba(10,31,68,0.06);
-    }
-
-    .service-icon {
-      width: 52px; height: 52px;
-      border-radius: 14px;
-      background: var(--blue-deep);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-    }
-
-    .service-day {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      color: var(--blue-deep);
-      margin-bottom: 2px;
-    }
-
-    .service-time {
-      font-size: 0.82rem;
-      color: var(--gold);
-      font-weight: 700;
-    }
-
-    .service-desc { font-size: 0.78rem; color: var(--gray-text); margin-top: 2px; }
-
-    /* === LOCATION === */
-    .location-section { background: var(--white); }
-
-    .location-card {
-      background: var(--blue-deep);
-      border-radius: 20px;
-      padding: 28px 24px;
-      margin-top: 24px;
-      color: var(--white);
-      text-align: center;
-    }
-
-    .location-icon { font-size: 2.5rem; margin-bottom: 12px; }
-    .location-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      margin-bottom: 8px;
-    }
-    .location-addr { font-size: 0.88rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
-
-    .map-btn {
-      display: inline-block;
-      margin-top: 18px;
-      padding: 11px 24px;
-      background: var(--gold);
-      color: var(--blue-deep);
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      text-decoration: none;
-    }
-
-    /* === QUICK LINKS === */
-    .links-section { background: var(--blue-pale); }
-
-    .links-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 24px;
-    }
-
-    .link-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 20px 16px;
-      text-align: center;
-      text-decoration: none;
-      box-shadow: 0 2px 12px rgba(10,31,68,0.06);
-      transition: transform 0.2s, box-shadow 0.2s;
-      border-bottom: 3px solid var(--border);
-    }
-
-    .link-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(10,31,68,0.12);
-      border-bottom-color: var(--gold);
-    }
-
-    .link-card-icon { font-size: 1.8rem; margin-bottom: 8px; }
-    .link-card-title {
-      font-weight: 700;
-      font-size: 0.88rem;
-      color: var(--blue-deep);
-      margin-bottom: 4px;
-    }
-    .link-card-desc { font-size: 0.73rem; color: var(--gray-text); }
-
-    /* === FOOTER === */
-    footer {
-      background: var(--blue-deep);
-      padding: 36px 24px;
-      text-align: center;
-    }
-
-    .footer-cross { color: var(--gold); font-size: 1.8rem; display: block; margin-bottom: 10px; }
-    .footer-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      color: var(--white);
-      margin-bottom: 6px;
-    }
-    .footer-motto { font-size: 0.8rem; color: rgba(255,255,255,0.5); font-style: italic; margin-bottom: 16px; }
-    .footer-divider { width: 32px; height: 2px; background: var(--gold); margin: 0 auto 16px; border-radius: 2px; }
-    .footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+    /* TOAST */
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--blue-deep); color:var(--white); padding:12px 24px; border-radius:40px; font-size:0.85rem; font-weight:600; border:1px solid var(--gold); transition:transform 0.3s ease; z-index:999; white-space:nowrap; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
+
+  <div class="toast" id="toast">✅ Account number copied!</div>
 
   <!-- NAV -->
   <nav>
     <div class="nav-logo">CCG <span>Family</span></div>
     <div class="nav-links">
       <a href="#about" class="nav-link">About</a>
-      <a href="#services" class="nav-link">Services</a>
-      <a href="index.html" class="nav-link primary">Register</a>
+      <a href="#giving" class="nav-link">Give</a>
+      <a href="index.html" class="nav-link gold">Register</a>
     </div>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
     <span class="hero-cross">✝</span>
-    <h1 class="hero-title">City Citadel of<br/><span>Grace Family</span></h1>
+    <p class="hero-eyebrow">Welcome to</p>
+    <h1 class="hero-title">City Citadel of<br/><em>Grace Family</em></h1>
     <p class="hero-motto">"He that winneth souls is wise"</p>
-    <p class="hero-verse">Proverbs 11:30</p>
+    <p class="hero-verse">— Proverbs 11:30</p>
     <div class="hero-divider"></div>
     <div class="hero-btns">
-      <a href="index.html" class="btn-primary">✍️ Register Now</a>
-      <a href="#about" class="btn-secondary">Learn More</a>
+      <a href="index.html" class="btn btn-gold">✍️ Register Now</a>
+      <a href="#about" class="btn btn-outline">Learn More</a>
     </div>
     <div class="hero-scroll">▼ scroll</div>
   </section>
+
+  <!-- WELCOME STRIP -->
+  <div class="welcome-strip">
+    <p>You are not just a visitor — <strong>you are family.</strong><br/>
+    A place where grace meets purpose and lives are transformed.</p>
+  </div>
 
   <!-- ABOUT -->
   <section class="about-section" id="about">
     <div class="section-inner">
       <p class="section-tag">Who We Are</p>
-      <div class="gold-line"></div>
+      <div class="gold-bar"></div>
       <h2 class="section-title">A Family Built on Grace</h2>
-      <p class="section-text">
-        City Citadel of Grace Family is a non-denominational fellowship rooted in the love of God and the power of community.
-        We are a family of believers committed to winning souls, growing in faith, and impacting our city for Christ.
-        Whether you are visiting for the first time or looking for a place to belong — you are welcome here.
-      </p>
-      <div class="about-cards">
-        <div class="about-card">
-          <div class="about-card-icon">🙏</div>
-          <div class="about-card-title">Faith-Driven</div>
-          <div class="about-card-text">Grounded in the Word of God and powered by prayer.</div>
-        </div>
-        <div class="about-card">
-          <div class="about-card-icon">❤️</div>
-          <div class="about-card-title">Family Spirit</div>
-          <div class="about-card-text">A warm, welcoming community where everyone belongs.</div>
-        </div>
-        <div class="about-card">
-          <div class="about-card-icon">🌍</div>
-          <div class="about-card-title">Soul-Winning</div>
-          <div class="about-card-text">Passionate about reaching the lost and making disciples.</div>
-        </div>
-        <div class="about-card">
-          <div class="about-card-icon">🔥</div>
-          <div class="about-card-title">Spirit-Led</div>
-          <div class="about-card-text">Moving with the Holy Spirit in worship and ministry.</div>
-        </div>
+      <p class="section-text">City Citadel of Grace Family is a non-denominational fellowship rooted in the love of God and the power of community. We are a family of believers committed to winning souls, growing in faith, and impacting our city for Christ. Whether you are visiting for the first time or looking for a place to belong — you are welcome here.</p>
+      <div class="values-grid">
+        <div class="value-card"><div class="value-icon">🙏</div><div class="value-title">Faith-Driven</div><div class="value-text">Grounded in the Word of God and powered by prayer.</div></div>
+        <div class="value-card"><div class="value-icon">❤️</div><div class="value-title">Family Spirit</div><div class="value-text">A warm, welcoming community where everyone belongs.</div></div>
+        <div class="value-card"><div class="value-icon">🌍</div><div class="value-title">Soul-Winning</div><div class="value-text">Passionate about reaching the lost and making disciples.</div></div>
+        <div class="value-card"><div class="value-icon">🔥</div><div class="value-title">Spirit-Led</div><div class="value-text">Moving with the Holy Spirit in worship and ministry.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORY -->
+  <section class="history-section" id="history">
+    <div class="section-inner">
+      <p class="section-tag">Our Story</p>
+      <div class="gold-bar"></div>
+      <h2 class="section-title">History of City Citadel of Grace Family</h2>
+      <div class="history-card">
+        <span class="history-year">Founded 2021</span>
+        <p class="history-text">City Citadel of Grace Family was founded in 2021 by <strong>Hon. Arc. Min. Christopher Joshua James JP</strong> with a clear divine mandate to raise a people rooted in grace, truth, and kingdom purpose. What began as a small fellowship of passionate believers has, over the past five years, grown into a vibrant spiritual family committed to transforming lives and communities through the power of God's Word.</p>
+        <p class="history-text">From its inception, the ministry has emphasized sound teaching, fervent worship, and intentional discipleship, creating an atmosphere where individuals are equipped to discover their identity and function effectively in God's kingdom. Through consistent gatherings, outreach programs, and leadership development initiatives, City Citadel of Grace Family has steadily expanded its reach and impact.</p>
+        <p class="history-text">Today, the ministry stands as a beacon of hope and empowerment, nurturing men, women, and youth to live purpose-driven lives while advancing the gospel both locally and beyond.</p>
+        <div class="history-quote">"Its journey over the past five years reflects a testimony of growth, resilience, and unwavering commitment to its founding vision: <strong>building lives, restoring destinies, and establishing God's kingdom on earth.</strong>"</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEADERSHIP -->
+  <section class="leadership-section" id="leadership">
+    <div class="section-inner">
+      <p class="section-tag">Our Leader</p>
+      <div class="gold-bar"></div>
+      <h2 class="section-title">Meet Our Leader</h2>
+      <div class="leader-card">
+        <div class="leader-avatar">👨‍💼</div>
+        <div class="leader-name">Min. Christopher James Joshua</div>
+        <div class="leader-title">Founder & Lead Minister</div>
+        <p class="leader-text">A man of vision and purpose, Min. Christopher James Joshua founded City Citadel of Grace Family in 2021 under a divine mandate to build lives, restore destinies, and advance God's kingdom. His leadership is marked by sound teaching, compassion, and an unwavering passion for souls.</p>
       </div>
     </div>
   </section>
@@ -469,29 +254,56 @@
   <section class="services-section" id="services">
     <div class="section-inner">
       <p class="section-tag">Join Us</p>
-      <div class="gold-line"></div>
+      <div class="gold-bar"></div>
       <h2 class="section-title">Service Times</h2>
-      <p class="section-text">We gather regularly to worship, learn, and grow together. All are welcome!</p>
+      <p class="section-text">We gather regularly to worship, learn, and grow. All are welcome to join us!</p>
       <div class="service-list">
-
-        <div class="service-item">
-          <div class="service-icon">🎵</div>
-          <div>
-            <div class="service-day">Thursday</div>
-            <div class="service-time">5:00 PM</div>
-            <div class="service-desc">Departmental Rehearsal — All units prepare together</div>
-          </div>
-        </div>
-
-        <div class="service-item">
-          <div class="service-icon">✝️</div>
+        <div class="service-card">
+          <div class="service-icon-box">✝️</div>
           <div>
             <div class="service-day">Monday</div>
             <div class="service-time">5:00 PM</div>
             <div class="service-desc">Main Family Service — Worship, Word & Fellowship</div>
           </div>
         </div>
+        <div class="service-card">
+          <div class="service-icon-box">🎵</div>
+          <div>
+            <div class="service-day">Thursday</div>
+            <div class="service-time">5:00 PM</div>
+            <div class="service-desc">Departmental Rehearsal — All units prepare together</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- GIVING -->
+  <section class="giving-section" id="giving">
+    <div class="section-inner">
+      <p class="section-tag">Online Giving</p>
+      <div class="gold-bar"></div>
+      <h2 class="section-title">Support the Vision</h2>
+      <p class="section-text">Your giving is an act of worship and partnership with God's work in this house. Every seed sown here goes toward advancing the gospel and building lives.</p>
+      <div class="giving-card">
+        <h3 class="giving-title">💛 Give to CCG Family</h3>
+        <p class="giving-verse">"Give, and it shall be given unto you..." — Luke 6:38</p>
+        <div class="giving-details">
+          <div class="giving-row">
+            <span class="giving-label">Bank Name</span>
+            <span class="giving-value">Moniepoint</span>
+          </div>
+          <div class="giving-row">
+            <span class="giving-label">Account Name</span>
+            <span class="giving-value">Mary Christopher Joshua</span>
+          </div>
+          <div class="giving-row">
+            <span class="giving-label">Account Number</span>
+            <span class="giving-value gold-num" id="acctNum">5986808805</span>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyAccount()">📋 Copy Account Number</button>
+        <p class="copy-note">Tap to copy and paste in your banking app</p>
       </div>
     </div>
   </section>
@@ -500,51 +312,32 @@
   <section class="location-section" id="location">
     <div class="section-inner">
       <p class="section-tag">Find Us</p>
-      <div class="gold-line"></div>
+      <div class="gold-bar"></div>
       <h2 class="section-title">Our Location</h2>
       <div class="location-card">
         <div class="location-icon">📍</div>
         <div class="location-name">City Citadel of Grace Family</div>
-        <div class="location-addr">
-          Udo Obot Street<br/>
-          Uyo, Akwa Ibom State<br/>
-          Nigeria
+        <div class="location-addr">Udo Obot Street<br/>Uyo, Akwa Ibom State, Nigeria</div>
+        <div class="location-times">
+          <p><strong>Monday</strong> — 5:00 PM · Main Family Service</p>
+          <p><strong>Thursday</strong> — 5:00 PM · Departmental Rehearsal</p>
         </div>
-        <a href="https://maps.google.com/?q=Udo+Obot+Street+Uyo+Akwa+Ibom" target="_blank" class="map-btn">
-          🗺️ Open in Google Maps
-        </a>
+        <a href="https://maps.google.com/?q=Udo+Obot+Street+Uyo+Akwa+Ibom+Nigeria" target="_blank" class="map-btn">🗺️ Open in Google Maps</a>
       </div>
     </div>
   </section>
 
-  <!-- QUICK LINKS -->
-  <section class="links-section" id="links">
+  <!-- NEW HERE -->
+  <section class="newhere-section" id="new">
     <div class="section-inner">
-      <p class="section-tag">Quick Access</p>
-      <div class="gold-line"></div>
-      <h2 class="section-title">Family Portal</h2>
-      <p class="section-text">Everything you need in one place.</p>
-      <div class="links-grid">
-        <a href="index.html" class="link-card">
-          <div class="link-card-icon">✍️</div>
-          <div class="link-card-title">Register</div>
-          <div class="link-card-desc">Join the CCG family</div>
-        </a>
-        <a href="dashboard.html" class="link-card">
-          <div class="link-card-icon">📊</div>
-          <div class="link-card-title">Dashboard</div>
-          <div class="link-card-desc">Leaders only</div>
-        </a>
-        <a href="attendance.html" class="link-card">
-          <div class="link-card-icon">📋</div>
-          <div class="link-card-title">Attendance</div>
-          <div class="link-card-desc">Mark service attendance</div>
-        </a>
-        <a href="qrcode.html" class="link-card">
-          <div class="link-card-icon">📲</div>
-          <div class="link-card-title">QR Code</div>
-          <div class="link-card-desc">Scan & register</div>
-        </a>
+      <p class="section-tag">First Time?</p>
+      <div class="gold-bar"></div>
+      <h2 class="section-title">New Here?</h2>
+      <div class="newhere-card">
+        <div class="newhere-icon">🌟</div>
+        <h3 class="newhere-title">You're Welcome Here!</h3>
+        <p class="newhere-text">We're so glad you found us. At City Citadel of Grace Family, every person matters. Whether you're exploring faith or looking for a spiritual home, we'd love to connect with you personally. Register below so we can welcome you into the family!</p>
+        <a href="index.html" class="btn btn-gold">✍️ Register & Join the Family</a>
       </div>
     </div>
   </section>
@@ -554,10 +347,37 @@
     <span class="footer-cross">✝</span>
     <div class="footer-name">City Citadel of Grace Family</div>
     <div class="footer-motto">"He that winneth souls is wise" — Proverbs 11:30</div>
+    <div class="footer-links">
+      <a href="#about" class="footer-link">About</a>
+      <a href="#history" class="footer-link">History</a>
+      <a href="#services" class="footer-link">Services</a>
+      <a href="#giving" class="footer-link">Give</a>
+      <a href="#location" class="footer-link">Location</a>
+      <a href="index.html" class="footer-link">Register</a>
+    </div>
     <div class="footer-divider"></div>
     <div class="footer-copy">© 2025 City Citadel of Grace Family · Uyo, Akwa Ibom State · All rights reserved</div>
   </footer>
 
+  <script>
+    function copyAccount() {
+      const acct = document.getElementById('acctNum').textContent;
+      navigator.clipboard.writeText(acct).then(showToast).catch(() => {
+        const el = document.createElement('textarea');
+        el.value = acct;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        showToast();
+      });
+    }
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+  </script>
+
 </body>
-  </html>
-  
+</html>
