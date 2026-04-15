@@ -438,6 +438,22 @@
       <div class="loading"><span class="spinner-inline"></span> Loading units...</div>
     </div>
 
+    <!-- Follow-up List -->
+    <p class="section-title">🌱 New Members Follow-up (Last 30 Days)</p>
+    <div class="table-card" style="margin-bottom:24px;">
+      <div class="table-header">
+        <span id="followupCount">Loading...</span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Type</th><th>Registered</th></tr></thead>
+          <tbody id="followupBody">
+            <tr><td colspan="5"><div class="loading"><span class="spinner-inline"></span> Loading...</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- Members Table -->
     <p class="section-title">All Registrations</p>
     <div class="table-card">
@@ -510,6 +526,7 @@
       const data = rows.slice(1).filter(r => r[1]); // skip header, skip empty rows
 
       renderStats(data);
+      renderFollowup(data);
       renderUnits(data);
       renderTable(data);
 
@@ -632,8 +649,55 @@
       `<tr><td colspan="7"><div class="empty-state">No registrations yet.</div></td></tr>`;
     document.getElementById('tableCount').textContent = '0 Registrations';
   }
+
+  // ===== RENDER FOLLOW-UP LIST =====
+  function renderFollowup(data) {
+    const now = new Date();
+    const cutoff = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    const newPeople = data.filter(r => {
+      const dateStr = r[8] || r[0];
+      if (!dateStr) return false;
+      const parts = dateStr.split('/');
+      let d;
+      if (parts.length === 3) {
+        d = new Date(`${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`);
+      } else {
+        d = new Date(dateStr);
+      }
+      return !isNaN(d) && d >= cutoff;
+    });
+
+    document.getElementById('followupCount').textContent =
+      `${newPeople.length} New Registration${newPeople.length !== 1 ? 's' : ''} in Last 30 Days`;
+
+    if (newPeople.length === 0) {
+      document.getElementById('followupBody').innerHTML =
+        `<tr><td colspan="5"><div class="empty-state">No new registrations in the last 30 days.</div></td></tr>`;
+      return;
+    }
+
+    const badgeClass = {
+      'Member': 'badge-member', 'Worker': 'badge-worker',
+      'Regular Visitor': 'badge-visitor', 'First Timer': 'badge-first'
+    };
+
+    let html = '';
+    newPeople.forEach((r, i) => {
+      const type = r[4] || '';
+      const badge = badgeClass[type] || 'badge-member';
+      html += `<tr>
+        <td>${i + 1}</td>
+        <td><strong>${r[1] || '—'}</strong></td>
+        <td>${r[2] || '—'}</td>
+        <td><span class="badge ${badge}">${type || '—'}</span></td>
+        <td>${r[8] || '—'}</td>
+      </tr>`;
+    });
+    document.getElementById('followupBody').innerHTML = html;
+  }
+
 </script>
 
 </body>
-  </html>
-  
+</html>
