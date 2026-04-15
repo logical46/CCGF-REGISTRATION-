@@ -507,6 +507,24 @@
       <div class="success-icon">🎉</div>
       <h2 class="success-title">Welcome to the Family!</h2>
       <p class="success-msg">Your registration has been received.<br/>God bless you as you connect with us at<br/><strong>City Citadel of Grace Family.</strong></p>
+      <a id="whatsappBtn" href="#" target="_blank" style="
+        display: inline-block;
+        margin-top: 24px;
+        padding: 13px 28px;
+        background: #25D366;
+        color: white;
+        border-radius: 12px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+      ">💬 Send Us a WhatsApp Message</a>
+      <p style="font-size:0.75rem; color:#8a9bb5; margin-top:10px;">Tap to receive your welcome message</p>
+      <div style="margin-top:24px; padding:16px; background:#f0f5ff; border-radius:12px;">
+        <p style="font-size:0.82rem; color:#1a3a6b; font-weight:600;">🏠 Redirecting to our homepage in <span id="countdown">5</span> seconds...</p>
+        <a href="home.html" style="display:inline-block; margin-top:10px; font-size:0.82rem; color:#1e5fd4; font-weight:600; text-decoration:none;">Go now →</a>
+      </div>
     </div>
 
   </div>
@@ -570,8 +588,21 @@
           body: JSON.stringify(data)
         });
         // Show success
+        const waMessage = encodeURIComponent(`Hello! I just registered with City Citadel of Grace Family. My name is ${fullName}. 🙏✝️\n\nHello and welcome to City Citadel of Grace Family! 🙏✝️\n\nWe're so glad you registered with us. You are not just a visitor — you are family!\n\nWe look forward to growing together in faith, love, and purpose.\n\nGod bless you richly! 🌟`);
+        document.getElementById('whatsappBtn').href = `https://wa.me/2347031557488?text=${waMessage}`;
         document.getElementById('formCard').style.display = 'none';
         document.getElementById('successCard').style.display = 'block';
+        // Countdown redirect
+        let secs = 5;
+        const countEl = document.getElementById('countdown');
+        const timer = setInterval(() => {
+          secs--;
+          if (countEl) countEl.textContent = secs;
+          if (secs <= 0) {
+            clearInterval(timer);
+            window.location.href = 'home.html';
+          }
+        }, 1000);
       } catch (err) {
         alert('Submission failed. Please check your connection and try again.');
         document.getElementById('submitBtn').disabled = false;
@@ -582,4 +613,5 @@
   </script>
 
 </body>
-</html>
+  </html>
+  
