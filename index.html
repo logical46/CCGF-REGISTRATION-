@@ -381,7 +381,7 @@
           <img id="photoPreviewImg" src="" alt="Preview"/>
           <span class="photo-icon" id="photoIcon">📷</span>
         </div>
-        <label for="photoInput" class="photo-upload-btn">📁 Choose Photo </label>
+        <label for="photoInput" class="photo-upload-btn">📁 Choose Photo (optional)</label>
         <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)"/>
       </div>
 
@@ -563,7 +563,7 @@
 
     // --- Form Submit ---
     // REPLACE THIS URL with your Google Apps Script deployment URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyoKyf28Nj-hb1hFY-cJOrGNKsbiwBpbcgfedN_-2bPCKwINREzVsQqOynFyf3aWglucg/exec;
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxme5qXj9Tsw4QYL4THcMhFAOFhmGqNCmiveN7rCZdtvfqyeInd1TJwRqyVV9dpTwco_A/exec";
 
     async function submitForm() {
       // Validate required fields
@@ -601,19 +601,17 @@
           body: JSON.stringify(data)
         });
         // Show success
-        const waMessage = encodeURIComponent(`Hello! I just registered with City Citadel of Grace Family. My name is ${fullName}.;
+        const waMessage = encodeURIComponent(`Hello! I just registered with City Citadel of Grace Family. My name is ${fullName}. 🙏✝️\n\nHello and welcome to City Citadel of Grace Family! 🙏✝️\n\nWe're so glad you registered with us. You are not just a visitor — you are family!\n\nWe look forward to growing together in faith, love, and purpose.\n\nGod bless you richly! 🌟`);
         document.getElementById('whatsappBtn').href = `https://wa.me/2347031557488?text=${waMessage}`;
         // Add ID card button for Members and Workers only
         const idCardTypes = ['Member', 'Worker'];
         if (idCardTypes.includes(data.attendanceType)) {
-          const photoData = document.getElementById('photoPreviewImg').src || '';
           const idParams = new URLSearchParams({
             name: fullName,
             phone: phone,
             unit: data.serviceUnit,
             role: data.role,
             type: data.attendanceType,
-            photo: photoData.startsWith('data:') ? photoData : '',
             date: data.submissionDate
           });
           const idBtn = document.getElementById('idCardBtn');
@@ -621,4 +619,6 @@
           idBtn.style.display = 'inline-block';
         }
 
-        document
+        document.getElementById('formCard').style.display = 'none';
+        document.getElementById('successCard').style.display = 'block';
+        // Countdown redi
