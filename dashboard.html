@@ -456,13 +456,61 @@
 
     <!-- Members Table -->
     <p class="section-title">All Registrations</p>
+
+    <!-- Search & Filter Bar -->
+    <div style="background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 12px rgba(10,31,68,0.07);margin-bottom:14px;display:flex;flex-direction:column;gap:10px;">
+      <input type="text" id="searchInput" placeholder="🔍 Search by name..." oninput="filterTable()"
+        style="padding:10px 14px;border:1.5px solid #d4e0f5;border-radius:10px;font-family:DM Sans,sans-serif;font-size:0.88rem;color:#0a1f44;background:#f7f9fc;width:100%;outline:none;"/>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <select id="filterType" onchange="filterTable()"
+          style="flex:1;min-width:130px;padding:9px 12px;border:1.5px solid #d4e0f5;border-radius:10px;font-family:DM Sans,sans-serif;font-size:0.82rem;color:#0a1f44;background:#f7f9fc;outline:none;-webkit-appearance:none;">
+          <option value="">All Types</option>
+          <option>First Timer</option>
+          <option>Regular Visitor</option>
+          <option>Member</option>
+          <option>Worker</option>
+        </select>
+        <select id="filterUnit" onchange="filterTable()"
+          style="flex:1;min-width:130px;padding:9px 12px;border:1.5px solid #d4e0f5;border-radius:10px;font-family:DM Sans,sans-serif;font-size:0.82rem;color:#0a1f44;background:#f7f9fc;outline:none;-webkit-appearance:none;">
+          <option value="">All Units</option>
+          <option>Choir / Music Team</option>
+          <option>Instrumentalists / Band</option>
+          <option>Media & Projection</option>
+          <option>Drama & Creative Arts</option>
+          <option>Protocol / Ushering</option>
+          <option>Hospitality & Welfare</option>
+          <option>Decoration & Aesthetics</option>
+          <option>Prayer & Intercession</option>
+          <option>Word & Bible Study</option>
+          <option>Evangelism & Outreach</option>
+          <option>Discipleship & Follow-up</option>
+          <option>Children's Church / Sunday School</option>
+          <option>Youth Ministry</option>
+          <option>Women's Ministry</option>
+          <option>Men's Ministry</option>
+          <option>Finance & Stewardship</option>
+          <option>Security</option>
+          <option>Social Media & Communications</option>
+          <option>Photography & Videography</option>
+          <option>IT & Technical Support</option>
+        </select>
+        <button onclick="clearFilters()"
+          style="padding:9px 14px;background:#e8f0fe;color:#1e5fd4;border:none;border-radius:10px;font-family:DM Sans,sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;">
+          ✕ Clear
+        </button>
+      </div>
+    </div>
+
     <div class="table-card">
       <div class="table-header">
         <span id="tableCount">Loading...</span>
-        <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+        <div style="display:flex;gap:6px;">
+          <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+          <button class="refresh-btn" onclick="exportPDF()" style="background:#c9a84c;color:#0a1f44;">⬇ Export PDF</button>
+        </div>
       </div>
       <div class="table-scroll">
-        <table>
+        <table id="membersTable">
           <thead>
             <tr>
               <th>#</th>
@@ -487,6 +535,7 @@
 <script>
   // ===== CONFIG =====
   const PASSWORD = "ccg2025";
+  let allData = [];
 
   // REPLACE with your Google Sheet published CSV URL
   // (Instructions below on how to get this)
@@ -614,90 +663,4 @@
     }
 
     const badgeClass = {
-      'Member': 'badge-member',
-      'Worker': 'badge-worker',
-      'Regular Visitor': 'badge-visitor',
-      'First Timer': 'badge-first'
-    };
-
-    let html = '';
-    data.forEach((r, i) => {
-      const type = r[4] || '';
-      const badge = badgeClass[type] || 'badge-member';
-      html += `
-        <tr>
-          <td>${i + 1}</td>
-          <td><strong>${r[1] || '—'}</strong></td>
-          <td>${r[2] || '—'}</td>
-          <td><span class="badge ${badge}">${type || '—'}</span></td>
-          <td>${r[5] || '—'}</td>
-          <td>${r[6] || '—'}</td>
-          <td>${r[8] || '—'}</td>
-        </tr>`;
-    });
-
-    document.getElementById('tableBody').innerHTML = html;
-  }
-
-  function showEmpty() {
-    document.getElementById('totalCount').textContent = '0';
-    document.getElementById('memberCount').textContent = '0';
-    document.getElementById('workerCount').textContent = '0';
-    document.getElementById('firstTimerCount').textContent = '0';
-    document.getElementById('unitsCard').innerHTML = '<div class="empty-state">No registrations yet.</div>';
-    document.getElementById('tableBody').innerHTML =
-      `<tr><td colspan="7"><div class="empty-state">No registrations yet.</div></td></tr>`;
-    document.getElementById('tableCount').textContent = '0 Registrations';
-  }
-
-  // ===== RENDER FOLLOW-UP LIST =====
-  function renderFollowup(data) {
-    const now = new Date();
-    const cutoff = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-
-    const newPeople = data.filter(r => {
-      const dateStr = r[8] || r[0];
-      if (!dateStr) return false;
-      const parts = dateStr.split('/');
-      let d;
-      if (parts.length === 3) {
-        d = new Date(`${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`);
-      } else {
-        d = new Date(dateStr);
-      }
-      return !isNaN(d) && d >= cutoff;
-    });
-
-    document.getElementById('followupCount').textContent =
-      `${newPeople.length} New Registration${newPeople.length !== 1 ? 's' : ''} in Last 30 Days`;
-
-    if (newPeople.length === 0) {
-      document.getElementById('followupBody').innerHTML =
-        `<tr><td colspan="5"><div class="empty-state">No new registrations in the last 30 days.</div></td></tr>`;
-      return;
-    }
-
-    const badgeClass = {
-      'Member': 'badge-member', 'Worker': 'badge-worker',
-      'Regular Visitor': 'badge-visitor', 'First Timer': 'badge-first'
-    };
-
-    let html = '';
-    newPeople.forEach((r, i) => {
-      const type = r[4] || '';
-      const badge = badgeClass[type] || 'badge-member';
-      html += `<tr>
-        <td>${i + 1}</td>
-        <td><strong>${r[1] || '—'}</strong></td>
-        <td>${r[2] || '—'}</td>
-        <td><span class="badge ${badge}">${type || '—'}</span></td>
-        <td>${r[8] || '—'}</td>
-      </tr>`;
-    });
-    document.getElementById('followupBody').innerHTML = html;
-  }
-
-</script>
-
-</body>
-</html>
+      'Member': 'bad
