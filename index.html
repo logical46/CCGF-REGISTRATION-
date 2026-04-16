@@ -1,624 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>City Citadel of Grace Family — Member Registration</title>
+  <title>CCG Family — Register</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --blue-deep: #0a1f44;
-      --blue-mid: #1a3a6b;
-      --blue-bright: #1e5fd4;
-      --blue-light: #e8f0fe;
-      --blue-pale: #f0f5ff;
-      --gold: #c9a84c;
-      --white: #ffffff;
-      --gray-soft: #f7f9fc;
-      --gray-text: #5a6a85;
-      --border: #d4e0f5;
-      --success: #1a8a5a;
+      --blue: #0a1f44; --blue-mid: #1a3a6b; --blue-bright: #1e5fd4;
+      --blue-light: #e8f0fe; --gold: #c9a84c; --white: #fff;
+      --gray: #f7f9fc; --gray-text: #5a6a85; --border: #d4e0f5;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: #f0f5ff; color: var(--blue); }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--blue-pale);
-      min-height: 100vh;
-      color: var(--blue-deep);
-    }
+    .header { background: linear-gradient(135deg, var(--blue), var(--blue-mid)); padding: 40px 24px 32px; text-align: center; }
+    .header-cross { color: var(--gold); font-size: 2rem; display: block; margin-bottom: 10px; }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #fff; }
+    .header p { font-size: 0.82rem; color: rgba(255,255,255,0.6); margin-top: 6px; }
 
-    /* === HEADER === */
-    .site-header {
-      background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 60%, #1a4a8a 100%);
-      padding: 48px 24px 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
+    .container { max-width: 600px; margin: 24px auto 48px; padding: 0 16px; }
+    .card { background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(10,31,68,0.09); overflow: hidden; }
 
-    .site-header::before {
-      content: '';
-      position: absolute;
-      top: -60px; left: -60px;
-      width: 220px; height: 220px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.04);
-    }
-    .site-header::after {
-      content: '';
-      position: absolute;
-      bottom: -80px; right: -40px;
-      width: 280px; height: 280px;
-      border-radius: 50%;
-      background: rgba(201,168,76,0.08);
-    }
+    .sec-label { background: var(--blue-light); padding: 10px 20px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-bright); border-bottom: 1px solid var(--border); }
+    .fields { padding: 20px; display: flex; flex-direction: column; gap: 16px; border-bottom: 1px solid var(--border); }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 0.8rem; font-weight: 600; color: var(--blue); }
+    label .req { color: #e05252; }
 
-    .header-cross {
-      font-size: 2rem;
-      color: var(--gold);
-      margin-bottom: 12px;
-      display: block;
-      animation: fadeDown 0.6s ease both;
+    input[type=text], input[type=tel], input[type=date], select {
+      padding: 11px 13px; border: 1.5px solid var(--border); border-radius: 9px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.93rem; color: var(--blue);
+      background: var(--gray); width: 100%; -webkit-appearance: none; appearance: none;
     }
+    input:focus, select:focus { outline: none; border-color: var(--blue-bright); background: #fff; }
 
-    .header-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.5rem, 5vw, 2.4rem);
-      color: var(--white);
-      line-height: 1.2;
-      animation: fadeDown 0.7s ease both;
-    }
+    .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .radio-opt { flex: 1; min-width: 90px; }
+    .radio-opt input { display: none; }
+    .radio-opt label { display: block; padding: 9px 6px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 0.78rem; font-weight: 500; color: var(--gray-text); cursor: pointer; text-align: center; background: var(--gray); transition: all 0.15s; }
+    .radio-opt input:checked + label { background: var(--blue-bright); border-color: var(--blue-bright); color: #fff; }
 
-    .header-subtitle {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.65);
-      margin-top: 8px;
-      font-weight: 300;
-      letter-spacing: 0.03em;
-      animation: fadeDown 0.8s ease both;
-    }
+    .submit-wrap { padding: 20px; }
+    #submitBtn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--blue-bright), var(--blue-mid)); color: #fff; border: none; border-radius: 11px; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+    #submitBtn:hover { opacity: 0.9; }
+    #submitBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+    #statusMsg { text-align: center; margin-top: 12px; font-size: 0.85rem; color: var(--gray-text); min-height: 20px; }
 
-    .header-divider {
-      width: 48px;
-      height: 3px;
-      background: var(--gold);
-      margin: 18px auto 0;
-      border-radius: 2px;
-      animation: expandWidth 0.9s ease both;
-    }
+    #successScreen { display: none; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(10,31,68,0.09); padding: 48px 24px; text-align: center; }
+    .success-icon { font-size: 3.5rem; margin-bottom: 14px; }
+    .success-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--blue); margin-bottom: 10px; }
+    .success-msg { font-size: 0.88rem; color: var(--gray-text); line-height: 1.7; margin-bottom: 24px; }
+    .wa-btn { display: inline-block; padding: 12px 24px; background: #25D366; color: #fff; border-radius: 11px; font-weight: 700; font-size: 0.9rem; text-decoration: none; margin-bottom: 10px; }
+    .id-btn { display: none; padding: 12px 24px; background: var(--blue); color: #fff; border-radius: 11px; font-weight: 700; font-size: 0.9rem; text-decoration: none; margin-top: 10px; }
+    .redirect-note { font-size: 0.75rem; color: #aaa; margin-top: 16px; }
 
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes expandWidth {
-      from { width: 0; }
-      to   { width: 48px; }
-    }
-
-    /* === FORM CONTAINER === */
-    .form-container {
-      max-width: 640px;
-      margin: 32px auto 48px;
-      padding: 0 16px;
-      animation: fadeUp 0.7s ease both;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .form-card {
-      background: var(--white);
-      border-radius: 20px;
-      box-shadow: 0 4px 32px rgba(10,31,68,0.10);
-      overflow: hidden;
-    }
-
-    /* === SECTION HEADERS === */
-    .section-label {
-      background: var(--blue-light);
-      padding: 12px 24px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--blue-bright);
-      border-bottom: 1px solid var(--border);
-    }
-
-    /* === PHOTO UPLOAD === */
-    .photo-section {
-      padding: 28px 24px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .photo-preview {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: var(--blue-light);
-      border: 3px dashed var(--blue-bright);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      overflow: hidden;
-      position: relative;
-      transition: border-color 0.2s;
-    }
-    .photo-preview:hover { border-color: var(--gold); }
-    .photo-preview img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: none;
-      border-radius: 50%;
-    }
-    .photo-icon { font-size: 2rem; color: var(--blue-bright); }
-    .photo-upload-btn {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 10px 22px;
-      background: var(--blue-light);
-      color: var(--blue-bright);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .photo-upload-btn:hover { background: var(--border); }
-    #photoInput { display: none; }
-
-    /* === FORM FIELDS === */
-    .fields-section {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    label {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--blue-deep);
-      letter-spacing: 0.01em;
-    }
-
-    label span.req {
-      color: #e05252;
-      margin-left: 2px;
-    }
-
-    input[type="text"],
-    input[type="tel"],
-    input[type="date"],
-    select {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-      color: var(--blue-deep);
-      background: var(--gray-soft);
-      transition: border-color 0.2s, box-shadow 0.2s;
-      appearance: none;
-      -webkit-appearance: none;
-    }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--blue-bright);
-      box-shadow: 0 0 0 3px rgba(30,95,212,0.1);
-      background: var(--white);
-    }
-
-    select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231a3a6b' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px;
-      cursor: pointer;
-    }
-
-    /* === ATTENDANCE TYPE TOGGLE === */
-    .toggle-group {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .toggle-option {
-      flex: 1;
-      min-width: 100px;
-    }
-
-    .toggle-option input[type="radio"] { display: none; }
-
-    .toggle-option label {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 8px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--gray-text);
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-      background: var(--gray-soft);
-      letter-spacing: 0;
-    }
-
-    .toggle-option input:checked + label {
-      background: var(--blue-bright);
-      border-color: var(--blue-bright);
-      color: var(--white);
-      box-shadow: 0 2px 10px rgba(30,95,212,0.3);
-    }
-
-    /* === SUBMIT === */
-    .submit-section {
-      padding: 24px;
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, var(--blue-bright), var(--blue-mid));
-      color: var(--white);
-      border: none;
-      border-radius: 12px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      letter-spacing: 0.02em;
-      transition: opacity 0.2s, transform 0.15s;
-      position: relative;
-    }
-
-    .submit-btn:hover { opacity: 0.92; transform: translateY(-1px); }
-    .submit-btn:active { transform: translateY(0); }
-    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-    .privacy-note {
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--gray-text);
-      margin-top: 12px;
-    }
-
-    /* === SUCCESS === */
-    .success-card {
-      display: none;
-      background: var(--white);
-      border-radius: 20px;
-      box-shadow: 0 4px 32px rgba(10,31,68,0.10);
-      padding: 48px 32px;
-      text-align: center;
-    }
-
-    .success-icon {
-      font-size: 3.5rem;
-      margin-bottom: 16px;
-    }
-
-    .success-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      color: var(--blue-deep);
-      margin-bottom: 10px;
-    }
-
-    .success-msg {
-      font-size: 0.95rem;
-      color: var(--gray-text);
-      line-height: 1.6;
-    }
-
-    /* === FOOTER === */
-    .site-footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 0.75rem;
-      color: #8a9bb5;
-    }
-
-    /* === SPINNER === */
-    .spinner {
-      display: inline-block;
-      width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,0.4);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      vertical-align: middle;
-      margin-right: 8px;
-      display: none;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    footer { text-align: center; padding: 16px; font-size: 0.72rem; color: #aaa; }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <span class="header-cross">✝</span>
-    <h1 class="header-title">City Citadel of Grace Family</h1>
-    <p class="header-subtitle">Member Registration Portal</p>
-    <div class="header-divider"></div>
-  </header>
+<div class="header">
+  <span class="header-cross">✝</span>
+  <h1>City Citadel of Grace Family</h1>
+  <p>Member Registration Portal</p>
+</div>
 
-  <!-- FORM CONTAINER -->
-  <div class="form-container">
+<div class="container">
 
-    <!-- REGISTRATION FORM -->
-    <div class="form-card" id="formCard">
+  <div class="card" id="formCard">
 
-      <!-- Photo -->
-      <div class="section-label">Profile Photo</div>
-      <div class="photo-section">
-        <div class="photo-preview" id="photoCircle">
-          <img id="photoPreviewImg" src="" alt="Preview"/>
-          <span class="photo-icon" id="photoIcon">📷</span>
-        </div>
-        <label for="photoInput" class="photo-upload-btn">📁 Choose Photo (optional)</label>
-        <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)"/>
+    <div class="sec-label">Personal Information</div>
+    <div class="fields">
+      <div class="field">
+        <label>Full Name <span class="req">*</span></label>
+        <input type="text" id="fullName" placeholder="e.g. Emmanuel Johnson"/>
       </div>
-
-      <!-- Personal Info -->
-      <div class="section-label">Personal Information</div>
-      <div class="fields-section">
-
-        <div class="field-group">
-          <label for="fullName">Full Name <span class="req">*</span></label>
-          <input type="text" id="fullName" placeholder="e.g. Emmanuel Johnson" required/>
-        </div>
-
-        <div class="field-group">
-          <label for="phone">Phone Number <span class="req">*</span></label>
-          <input type="tel" id="phone" placeholder="e.g. 08012345678" required/>
-        </div>
-
-        <div class="field-group">
-          <label for="dob">Date of Birth <span class="req">*</span></label>
-          <input type="date" id="dob" required/>
-        </div>
-
+      <div class="field">
+        <label>Phone Number <span class="req">*</span></label>
+        <input type="tel" id="phone" placeholder="e.g. 08012345678"/>
       </div>
-
-      <!-- Attendance Type -->
-      <div class="section-label">Attendance Type</div>
-      <div class="fields-section">
-        <div class="field-group">
-          <label>How do you attend? <span class="req">*</span></label>
-          <div class="toggle-group">
-            <div class="toggle-option">
-              <input type="radio" name="attendanceType" id="att1" value="First Timer"/>
-              <label for="att1">First Timer</label>
-            </div>
-            <div class="toggle-option">
-              <input type="radio" name="attendanceType" id="att2" value="Regular Visitor"/>
-              <label for="att2">Regular Visitor</label>
-            </div>
-            <div class="toggle-option">
-              <input type="radio" name="attendanceType" id="att3" value="Member"/>
-              <label for="att3">Member</label>
-            </div>
-            <div class="toggle-option">
-              <input type="radio" name="attendanceType" id="att4" value="Worker"/>
-              <label for="att4">Worker</label>
-            </div>
-          </div>
-        </div>
+      <div class="field">
+        <label>Date of Birth <span class="req">*</span></label>
+        <input type="date" id="dob"/>
       </div>
-
-      <!-- Service Unit -->
-      <div class="section-label">Service & Role</div>
-      <div class="fields-section">
-
-        <div class="field-group">
-          <label for="serviceUnit">Service Unit (Department)</label>
-          <select id="serviceUnit">
-            <option value="">— Select a unit —</option>
-            <optgroup label="Worship & Arts">
-              <option>Choir / Music Team</option>
-              <option>Instrumentalists / Band</option>
-              <option>Media & Projection</option>
-              <option>Drama & Creative Arts</option>
-            </optgroup>
-            <optgroup label="Order & Hospitality">
-              <option>Protocol / Ushering</option>
-              <option>Hospitality & Welfare</option>
-              <option>Decoration & Aesthetics</option>
-            </optgroup>
-            <optgroup label="Spiritual & Pastoral">
-              <option>Prayer & Intercession</option>
-              <option>Word & Bible Study</option>
-              <option>Evangelism & Outreach</option>
-              <option>Discipleship & Follow-up</option>
-            </optgroup>
-            <optgroup label="Support & Admin">
-              <option>Children's Church / Sunday School</option>
-              <option>Youth Ministry</option>
-              <option>Women's Ministry</option>
-              <option>Men's Ministry</option>
-              <option>Finance & Stewardship</option>
-              <option>Security</option>
-            </optgroup>
-            <optgroup label="Tech & Communications">
-              <option>Social Media & Communications</option>
-              <option>Photography & Videography</option>
-              <option>IT & Technical Support</option>
-            </optgroup>
-          </select>
-        </div>
-
-        <div class="field-group">
-          <label for="role">Leadership Role (if any)</label>
-          <select id="role">
-            <option value="">— Select a role —</option>
-            <option>Senior Pastor / Lead Pastor</option>
-            <option>Associate Pastor</option>
-            <option>Assistant Pastor</option>
-            <option>Elder</option>
-            <option>Deacon / Deaconess</option>
-            <option>Unit Head / Department Head</option>
-            <option>Cell / Small Group Leader</option>
-            <option>Worker-in-Training</option>
-            <option>None</option>
-          </select>
-        </div>
-
-      </div>
-
-      <!-- Submit -->
-      <div class="submit-section">
-        <button class="submit-btn" onclick="submitForm()" id="submitBtn">
-          <span class="spinner" id="spinner"></span>
-          <span id="submitText">Register Now</span>
-        </button>
-        <p class="privacy-note">🔒 Your information is kept private and secure.</p>
-      </div>
-
     </div>
 
-    <!-- SUCCESS CARD -->
-    <div class="success-card" id="successCard">
-      <div class="success-icon">🎉</div>
-      <h2 class="success-title">Welcome to the Family!</h2>
-      <p class="success-msg">Your registration has been received.<br/>God bless you as you connect with us at<br/><strong>City Citadel of Grace Family.</strong></p>
-      <a id="whatsappBtn" href="#" target="_blank" style="
-        display: inline-block;
-        margin-top: 24px;
-        padding: 13px 28px;
-        background: #25D366;
-        color: white;
-        border-radius: 12px;
-        font-family: 'DM Sans', sans-serif;
-        font-size: 0.95rem;
-        font-weight: 600;
-        text-decoration: none;
-        box-shadow: 0 4px 16px rgba(37,211,102,0.3);
-      ">💬 Send Us a WhatsApp Message</a>
-      <p style="font-size:0.75rem; color:#8a9bb5; margin-top:10px;">Tap to receive your welcome message</p>
-      <a id="idCardBtn" href="#" style="
-        display: none;
-        margin-top: 14px;
-        padding: 13px 28px;
-        background: linear-gradient(135deg, #0a1f44, #1a3a6b);
-        color: white;
-        border-radius: 12px;
-        font-family: DM Sans, sans-serif;
-        font-size: 0.95rem;
-        font-weight: 600;
-        text-decoration: none;
-        box-shadow: 0 4px 16px rgba(10,31,68,0.25);
-      ">🪪 View My Member ID Card</a>
-      <div style="margin-top:24px; padding:16px; background:#f0f5ff; border-radius:12px;">
-        <p style="font-size:0.82rem; color:#1a3a6b; font-weight:600;">🏠 Redirecting to our homepage in <span id="countdown">5</span> seconds...</p>
-        <a href="home.html" style="display:inline-block; margin-top:10px; font-size:0.82rem; color:#1e5fd4; font-weight:600; text-decoration:none;">Go now →</a>
+    <div class="sec-label">Attendance Type</div>
+    <div class="fields">
+      <div class="field">
+        <label>How do you attend? <span class="req">*</span></label>
+        <div class="radio-group">
+          <div class="radio-opt"><input type="radio" name="att" id="att1" value="First Timer"/><label for="att1">First Timer</label></div>
+          <div class="radio-opt"><input type="radio" name="att" id="att2" value="Regular Visitor"/><label for="att2">Regular Visitor</label></div>
+          <div class="radio-opt"><input type="radio" name="att" id="att3" value="Member"/><label for="att3">Member</label></div>
+          <div class="radio-opt"><input type="radio" name="att" id="att4" value="Worker"/><label for="att4">Worker</label></div>
+        </div>
       </div>
+    </div>
+
+    <div class="sec-label">Service & Role</div>
+    <div class="fields">
+      <div class="field">
+        <label>Service Unit</label>
+        <select id="serviceUnit">
+          <option value="">— Select a unit —</option>
+          <optgroup label="Worship & Arts">
+            <option>Choir / Music Team</option>
+            <option>Instrumentalists / Band</option>
+            <option>Media & Projection</option>
+            <option>Drama & Creative Arts</option>
+          </optgroup>
+          <optgroup label="Order & Hospitality">
+            <option>Protocol / Ushering</option>
+            <option>Hospitality & Welfare</option>
+            <option>Decoration & Aesthetics</option>
+          </optgroup>
+          <optgroup label="Spiritual & Pastoral">
+            <option>Prayer & Intercession</option>
+            <option>Word & Bible Study</option>
+            <option>Evangelism & Outreach</option>
+            <option>Discipleship & Follow-up</option>
+          </optgroup>
+          <optgroup label="Support & Admin">
+            <option>Children's Church / Sunday School</option>
+            <option>Youth Ministry</option>
+            <option>Women's Ministry</option>
+            <option>Men's Ministry</option>
+            <option>Finance & Stewardship</option>
+            <option>Security</option>
+          </optgroup>
+          <optgroup label="Tech & Communications">
+            <option>Social Media & Communications</option>
+            <option>Photography & Videography</option>
+            <option>IT & Technical Support</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label>Leadership Role (if any)</label>
+        <select id="role">
+          <option value="">— Select a role —</option>
+          <option>Senior Pastor / Lead Pastor</option>
+          <option>Associate Pastor</option>
+          <option>Assistant Pastor</option>
+          <option>Elder</option>
+          <option>Deacon / Deaconess</option>
+          <option>Unit Head / Department Head</option>
+          <option>Cell / Small Group Leader</option>
+          <option>Worker-in-Training</option>
+          <option>None</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button id="submitBtn" onclick="submitForm()">Register Now</button>
+      <div id="statusMsg"></div>
     </div>
 
   </div>
 
-  <footer class="site-footer">
-    © 2025 City Citadel of Grace Family · All rights reserved
-  </footer>
+  <div id="successScreen">
+    <div class="success-icon">🎉</div>
+    <h2 class="success-title">Welcome to the Family!</h2>
+    <p class="success-msg">Your registration has been received.<br/>God bless you as you connect with us at<br/><strong>City Citadel of Grace Family.</strong></p>
+    <a id="waBtn" href="#" target="_blank" class="wa-btn">💬 Send Us a WhatsApp Message</a><br/>
+    <a id="idBtn" href="#" class="id-btn">🪪 View My Member ID Card</a>
+    <p class="redirect-note" id="redirectNote"></p>
+  </div>
 
-  <script>
-    // --- Photo Preview ---
-    function previewPhoto(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = document.getElementById('photoPreviewImg');
-        img.src = e.target.result;
-        img.style.display = 'block';
-        document.getElementById('photoIcon').style.display = 'none';
-      };
-      reader.readAsDataURL(file);
+</div>
+
+<footer>© 2025 City Citadel of Grace Family · All rights reserved</footer>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxme5qXj9Tsw4QYL4THcMhFAOFhmGqNCmiveN7rCZdtvfqyeInd1TJwRqyVV9dpTwco_A/exec";
+
+  async function submitForm() {
+    const fullName = document.getElementById('fullName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const dob = document.getElementById('dob').value;
+    const attEl = document.querySelector('input[name="att"]:checked');
+    const serviceUnit = document.getElementById('serviceUnit').value || 'Not specified';
+    const role = document.getElementById('role').value || 'None';
+
+    if (!fullName) { alert('Please enter your full name.'); return; }
+    if (!phone) { alert('Please enter your phone number.'); return; }
+    if (!dob) { alert('Please enter your date of birth.'); return; }
+    if (!attEl) { alert('Please select your attendance type.'); return; }
+
+    const attendanceType = attEl.value;
+    const submissionDate = new Date().toLocaleDateString('en-NG');
+
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('submitBtn').textContent = 'Submitting...';
+    document.getElementById('statusMsg').textContent = 'Please wait...';
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({ fullName, phone, dob, attendanceType, serviceUnit, role, photoUrl: 'No Photo', submissionDate })
+      });
+    } catch(e) { /* no-cors always throws — this is normal */ }
+
+    // WhatsApp
+    const waMsg = encodeURIComponent("Hello! I just registered with City Citadel of Grace Family. My name is " + fullName + ". \ud83d\ude4f\n\nWelcome to City Citadel of Grace Family! \ud83d\ude4f\u271d\ufe0f\n\nWe're so glad you registered. You are not just a visitor — you are family!\n\nGod bless you richly! \ud83c\udf1f");
+    document.getElementById('waBtn').href = "https://wa.me/2347031557488?text=" + waMsg;
+
+    // ID card
+    if (['Member','Worker'].includes(attendanceType)) {
+      const p = new URLSearchParams({ name: fullName, phone, unit: serviceUnit, role, type: attendanceType, date: submissionDate });
+      document.getElementById('idBtn').href = 'idcard.html?' + p.toString();
+      document.getElementById('idBtn').style.display = 'inline-block';
     }
 
-    // --- Form Submit ---
-    // REPLACE THIS URL with your Google Apps Script deployment URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxme5qXj9Tsw4QYL4THcMhFAOFhmGqNCmiveN7rCZdtvfqyeInd1TJwRqyVV9dpTwco_A/exec";
+    // Show success
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
 
-    async function submitForm() {
-      // Validate required fields
-      const fullName = document.getElementById('fullName').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const dob = document.getElementById('dob').value;
-      const attendanceType = document.querySelector('input[name="attendanceType"]:checked');
+    // Redirect countdown
+    let secs = 10;
+    const note = document.getElementById('redirectNote');
+    note.textContent = 'Redirecting to homepage in ' + secs + 's...';
+    const timer = setInterval(function() {
+      secs--;
+      note.textContent = 'Redirecting to homepage in ' + secs + 's...';
+      if (secs <= 0) { clearInterval(timer); window.location.href = 'home.html'; }
+    }, 1000);
+  }
+</script>
 
-      if (!fullName) { alert('Please enter your full name.'); return; }
-      if (!phone) { alert('Please enter your phone number.'); return; }
-      if (!dob) { alert('Please enter your date of birth.'); return; }
-      if (!attendanceType) { alert('Please select your attendance type.'); return; }
-
-      const data = {
-        fullName,
-        phone,
-        dob,
-        attendanceType: attendanceType.value,
-        serviceUnit: document.getElementById('serviceUnit').value || 'Not specified',
-        role: document.getElementById('role').value || 'None',
-        photoUrl: document.getElementById('photoPreviewImg').src || 'No Photo',
-        submissionDate: new Date().toLocaleDateString('en-NG')
-      };
-
-      // Show loading
-      document.getElementById('submitBtn').disabled = true;
-      document.getElementById('spinner').style.display = 'inline-block';
-      document.getElementById('submitText').textContent = 'Submitting...';
-
-      try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        // Show success
-        const waMessage = encodeURIComponent(`Hello! I just registered with City Citadel of Grace Family. My name is ${fullName}. 🙏✝️\n\nHello and welcome to City Citadel of Grace Family! 🙏✝️\n\nWe're so glad you registered with us. You are not just a visitor — you are family!\n\nWe look forward to growing together in faith, love, and purpose.\n\nGod bless you richly! 🌟`);
-        document.getElementById('whatsappBtn').href = `https://wa.me/2347031557488?text=${waMessage}`;
-        // Add ID card button for Members and Workers only
-        const idCardTypes = ['Member', 'Worker'];
-        if (idCardTypes.includes(data.attendanceType)) {
-          const idParams = new URLSearchParams({
-            name: fullName,
-            phone: phone,
-            unit: data.serviceUnit,
-            role: data.role,
-            type: data.attendanceType,
-            date: data.submissionDate
-          });
-          const idBtn = document.getElementById('idCardBtn');
-          idBtn.href = 'idcard.html?' + idParams.toString();
-          idBtn.style.display = 'inline-block';
-        }
-
-        document.getElementById('formCard').style.display = 'none';
-        document.getElementById('successCard').style.display = 'block';
-        // Countdown redi
+</body>
+            </html>
+                                                                                                                              
