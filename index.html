@@ -521,6 +521,19 @@
         box-shadow: 0 4px 16px rgba(37,211,102,0.3);
       ">💬 Send Us a WhatsApp Message</a>
       <p style="font-size:0.75rem; color:#8a9bb5; margin-top:10px;">Tap to receive your welcome message</p>
+      <a id="idCardBtn" href="#" style="
+        display: none;
+        margin-top: 14px;
+        padding: 13px 28px;
+        background: linear-gradient(135deg, #0a1f44, #1a3a6b);
+        color: white;
+        border-radius: 12px;
+        font-family: DM Sans, sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 16px rgba(10,31,68,0.25);
+      ">🪪 View My Member ID Card</a>
       <div style="margin-top:24px; padding:16px; background:#f0f5ff; border-radius:12px;">
         <p style="font-size:0.82rem; color:#1a3a6b; font-weight:600;">🏠 Redirecting to our homepage in <span id="countdown">5</span> seconds...</p>
         <a href="home.html" style="display:inline-block; margin-top:10px; font-size:0.82rem; color:#1e5fd4; font-weight:600; text-decoration:none;">Go now →</a>
@@ -590,6 +603,24 @@
         // Show success
         const waMessage = encodeURIComponent(`Hello! I just registered with City Citadel of Grace Family. My name is ${fullName}. 🙏✝️\n\nHello and welcome to City Citadel of Grace Family! 🙏✝️\n\nWe're so glad you registered with us. You are not just a visitor — you are family!\n\nWe look forward to growing together in faith, love, and purpose.\n\nGod bless you richly! 🌟`);
         document.getElementById('whatsappBtn').href = `https://wa.me/2347031557488?text=${waMessage}`;
+        // Add ID card button for Members and Workers only
+        const idCardTypes = ['Member', 'Worker'];
+        if (idCardTypes.includes(data.attendanceType)) {
+          const photoData = document.getElementById('photoPreviewImg').src || '';
+          const idParams = new URLSearchParams({
+            name: fullName,
+            phone: phone,
+            unit: data.serviceUnit,
+            role: data.role,
+            type: data.attendanceType,
+            photo: photoData.startsWith('data:') ? photoData : '',
+            date: data.submissionDate
+          });
+          const idBtn = document.getElementById('idCardBtn');
+          idBtn.href = 'idcard.html?' + idParams.toString();
+          idBtn.style.display = 'inline-block';
+        }
+
         document.getElementById('formCard').style.display = 'none';
         document.getElementById('successCard').style.display = 'block';
         // Countdown redirect
@@ -613,5 +644,4 @@
   </script>
 
 </body>
-  </html>
-  
+</html>
