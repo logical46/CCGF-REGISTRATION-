@@ -381,7 +381,7 @@
           <img id="photoPreviewImg" src="" alt="Preview"/>
           <span class="photo-icon" id="photoIcon">📷</span>
         </div>
-        <label for="photoInput" class="photo-upload-btn">📁 Choose Photo </label>
+        <label for="photoInput" class="photo-upload-btn">📁 Choose Photo (optional)</label>
         <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)"/>
       </div>
 
@@ -601,7 +601,7 @@
           body: JSON.stringify(data)
         });
         // Show success
-        const waMessage = encodeURIComponent(`Hello! I just registered with City Citadel of Grace Family. My name is ${fullName}.;
+        const waMessage = encodeURIComponent(`Hello! I just registered with City Citadel of Grace Family. My name is ${fullName}. 🙏✝️\n\nHello and welcome to City Citadel of Grace Family! 🙏✝️\n\nWe're so glad you registered with us. You are not just a visitor — you are family!\n\nWe look forward to growing together in faith, love, and purpose.\n\nGod bless you richly! 🌟`);
         document.getElementById('whatsappBtn').href = `https://wa.me/2347031557488?text=${waMessage}`;
         // Add ID card button for Members and Workers only
         const idCardTypes = ['Member', 'Worker'];
@@ -621,27 +621,4 @@
           idBtn.style.display = 'inline-block';
         }
 
-        document.getElementById('formCard').style.display = 'none';
-        document.getElementById('successCard').style.display = 'block';
-        // Countdown redirect
-        let secs = 5;
-        const countEl = document.getElementById('countdown');
-        const timer = setInterval(() => {
-          secs--;
-          if (countEl) countEl.textContent = secs;
-          if (secs <= 0) {
-            clearInterval(timer);
-            window.location.href = 'home.html';
-          }
-        }, 1000);
-      } catch (err) {
-        alert('Submission failed. Please check your connection and try again.');
-        document.getElementById('submitBtn').disabled = false;
-        document.getElementById('spinner').style.display = 'none';
-        document.getElementById('submitText').textContent = 'Register Now';
-      }
-    }
-  </script>
-
-</body>
-</html>
+        document
