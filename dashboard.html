@@ -1,530 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CCG Leader Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --blue-deep: #0a1f44;
-      --blue-mid: #1a3a6b;
-      --blue-bright: #1e5fd4;
-      --blue-light: #e8f0fe;
-      --blue-pale: #f0f5ff;
-      --gold: #c9a84c;
-      --white: #ffffff;
-      --gray-soft: #f7f9fc;
-      --gray-text: #5a6a85;
-      --border: #d4e0f5;
-      --green: #1a8a5a;
-      --green-light: #e6f7f0;
-      --red: #c0392b;
-      --red-light: #fdecea;
-      --orange: #e67e22;
-      --orange-light: #fef5e7;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CCG Leader Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --blue:#0a1f44; --mid:#1a3a6b; --bright:#1e5fd4;
+  --light:#e8f0fe; --pale:#f0f5ff; --gold:#c9a84c;
+  --white:#fff; --soft:#f7f9fc; --gtext:#5a6a85; --border:#d4e0f5;
+  --green:#1a8a5a; --greenl:#e6f7f0; --red:#c0392b; --redl:#fdecea; --orange:#e67e22;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--pale);min-height:100vh;color:var(--blue);}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+/* LOGIN */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,var(--blue),var(--mid));}
+.login-card{background:#fff;border-radius:24px;padding:40px 28px;width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center;}
+.lc-cross{font-size:2.5rem;color:var(--gold);display:block;margin-bottom:10px;}
+.lc-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--blue);margin-bottom:4px;}
+.lc-sub{font-size:0.82rem;color:var(--gtext);margin-bottom:24px;}
+.lc-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:1rem;color:var(--blue);background:var(--soft);text-align:center;letter-spacing:0.1em;margin-bottom:12px;}
+.lc-input:focus{outline:none;border-color:var(--bright);}
+.lc-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--bright),var(--mid));color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;}
+.lc-err{color:var(--red);font-size:0.82rem;margin-top:8px;display:none;}
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--blue-pale);
-      min-height: 100vh;
-      color: var(--blue-deep);
-    }
+/* DASHBOARD */
+#dashScreen{display:none;}
+.dash-head{background:linear-gradient(135deg,var(--blue),var(--mid));padding:24px 20px;text-align:center;position:relative;}
+.dh-cross{color:var(--gold);font-size:1.3rem;display:block;margin-bottom:4px;}
+.dh-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;}
+.dh-sub{font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:3px;}
+.logout-btn{position:absolute;top:18px;right:14px;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:7px;padding:5px 11px;font-size:0.72rem;font-family:'DM Sans',sans-serif;cursor:pointer;}
 
-    /* ===== LOGIN SCREEN ===== */
-    #loginScreen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
-    }
+.dash-body{padding:18px 14px 48px;max-width:700px;margin:0 auto;}
 
-    .login-card {
-      background: var(--white);
-      border-radius: 24px;
-      padding: 40px 32px;
-      width: 100%;
-      max-width: 380px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      text-align: center;
-      animation: popIn 0.5s ease both;
-    }
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:22px;}
+.stat-card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(10,31,68,0.07);}
+.stat-icon{font-size:1.5rem;margin-bottom:6px;}
+.stat-val{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--blue);line-height:1;}
+.stat-lbl{font-size:0.72rem;color:var(--gtext);margin-top:3px;font-weight:500;}
 
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.92); }
-      to   { opacity: 1; transform: scale(1); }
-    }
+/* SECTION TITLE */
+.sec-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--blue);margin-bottom:10px;padding-left:10px;border-left:3px solid var(--gold);}
 
-    .login-cross {
-      font-size: 2.5rem;
-      color: var(--gold);
-      display: block;
-      margin-bottom: 12px;
-    }
+/* UNIT BARS */
+.units-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(10,31,68,0.07);margin-bottom:20px;}
+.unit-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+.unit-row:last-child{margin-bottom:0;}
+.unit-name{font-size:0.75rem;color:var(--blue);width:150px;flex-shrink:0;font-weight:500;}
+.unit-bar-bg{flex:1;background:var(--light);border-radius:20px;height:9px;overflow:hidden;}
+.unit-bar-fill{height:100%;background:linear-gradient(90deg,var(--bright),var(--mid));border-radius:20px;transition:width 1s ease;width:0%;}
+.unit-cnt{font-size:0.75rem;font-weight:700;color:var(--bright);width:18px;text-align:right;}
 
-    .login-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      color: var(--blue-deep);
-      margin-bottom: 4px;
-    }
+/* FOLLOW UP */
+.followup-card{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(10,31,68,0.07);overflow:hidden;margin-bottom:20px;}
 
-    .login-sub {
-      font-size: 0.82rem;
-      color: var(--gray-text);
-      margin-bottom: 28px;
-    }
+/* SEARCH & FILTER */
+.filter-card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(10,31,68,0.07);margin-bottom:12px;display:flex;flex-direction:column;gap:9px;}
+.filter-input{padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--blue);background:var(--soft);width:100%;}
+.filter-input:focus{outline:none;border-color:var(--bright);}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;}
+.filter-select{flex:1;min-width:120px;padding:8px 11px;border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--blue);background:var(--soft);-webkit-appearance:none;appearance:none;}
+.filter-select:focus{outline:none;border-color:var(--bright);}
+.clear-btn{padding:8px 13px;background:var(--light);color:var(--bright);border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;}
 
-    .login-input {
-      width: 100%;
-      padding: 13px 16px;
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      color: var(--blue-deep);
-      background: var(--gray-soft);
-      text-align: center;
-      letter-spacing: 0.1em;
-      margin-bottom: 14px;
-      transition: border-color 0.2s;
-    }
-
-    .login-input:focus {
-      outline: none;
-      border-color: var(--blue-bright);
-      background: var(--white);
-    }
-
-    .login-btn {
-      width: 100%;
-      padding: 13px;
-      background: linear-gradient(135deg, var(--blue-bright), var(--blue-mid));
-      color: var(--white);
-      border: none;
-      border-radius: 12px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .login-btn:hover { opacity: 0.9; }
-
-    .login-error {
-      color: var(--red);
-      font-size: 0.82rem;
-      margin-top: 10px;
-      display: none;
-    }
-
-    /* ===== DASHBOARD ===== */
-    #dashboard { display: none; }
-
-    .dash-header {
-      background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
-      padding: 28px 20px 24px;
-      text-align: center;
-      position: relative;
-    }
-
-    .dash-cross {
-      color: var(--gold);
-      font-size: 1.4rem;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .dash-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      color: var(--white);
-    }
-
-    .dash-sub {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.6);
-      margin-top: 4px;
-    }
-
-    .logout-btn {
-      position: absolute;
-      top: 20px; right: 16px;
-      background: rgba(255,255,255,0.12);
-      color: var(--white);
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 0.75rem;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-    }
-
-    .dash-body {
-      padding: 20px 16px 48px;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-
-    /* ===== STAT CARDS ===== */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 18px 16px;
-      box-shadow: 0 2px 12px rgba(10,31,68,0.07);
-      animation: fadeUp 0.5s ease both;
-    }
-
-    .stat-card:nth-child(1) { animation-delay: 0.1s; }
-    .stat-card:nth-child(2) { animation-delay: 0.15s; }
-    .stat-card:nth-child(3) { animation-delay: 0.2s; }
-    .stat-card:nth-child(4) { animation-delay: 0.25s; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .stat-icon { font-size: 1.6rem; margin-bottom: 8px; }
-    .stat-value {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      color: var(--blue-deep);
-      line-height: 1;
-    }
-    .stat-label {
-      font-size: 0.75rem;
-      color: var(--gray-text);
-      margin-top: 4px;
-      font-weight: 500;
-    }
-
-    /* ===== SECTION TITLE ===== */
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      color: var(--blue-deep);
-      margin-bottom: 12px;
-      padding-left: 4px;
-      border-left: 3px solid var(--gold);
-      padding-left: 10px;
-    }
-
-    /* ===== UNIT BARS ===== */
-    .units-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 2px 12px rgba(10,31,68,0.07);
-      margin-bottom: 24px;
-      animation: fadeUp 0.5s 0.3s ease both;
-    }
-
-    .unit-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .unit-name {
-      font-size: 0.78rem;
-      color: var(--blue-deep);
-      width: 160px;
-      flex-shrink: 0;
-      font-weight: 500;
-    }
-
-    .unit-bar-wrap {
-      flex: 1;
-      background: var(--blue-light);
-      border-radius: 20px;
-      height: 10px;
-      overflow: hidden;
-    }
-
-    .unit-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--blue-bright), var(--blue-mid));
-      border-radius: 20px;
-      transition: width 1s ease;
-      width: 0%;
-    }
-
-    .unit-count {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--blue-bright);
-      width: 20px;
-      text-align: right;
-    }
-
-    /* ===== MEMBERS TABLE ===== */
-    .table-card {
-      background: var(--white);
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(10,31,68,0.07);
-      overflow: hidden;
-      animation: fadeUp 0.5s 0.4s ease both;
-    }
-
-    .table-header {
-      background: var(--blue-deep);
-      color: var(--white);
-      padding: 14px 16px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .table-scroll { overflow-x: auto; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 500px;
-      font-size: 0.82rem;
-    }
-
-    thead tr {
-      background: var(--blue-light);
-    }
-
-    thead th {
-      padding: 10px 12px;
-      text-align: left;
-      font-weight: 600;
-      color: var(--blue-mid);
-      font-size: 0.75rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.15s;
-    }
-
-    tbody tr:hover { background: var(--blue-pale); }
-
-    tbody td {
-      padding: 10px 12px;
-      color: var(--blue-deep);
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.72rem;
-      font-weight: 600;
-    }
-
-    .badge-member { background: var(--blue-light); color: var(--blue-bright); }
-    .badge-worker { background: var(--green-light); color: var(--green); }
-    .badge-visitor { background: var(--orange-light); color: var(--orange); }
-    .badge-first { background: #fef9e7; color: #b7950b; }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--gray-text);
-      font-size: 0.88rem;
-    }
-
-    /* ===== LOADING ===== */
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: var(--gray-text);
-      font-size: 0.88rem;
-    }
-
-    .spinner-inline {
-      display: inline-block;
-      width: 20px; height: 20px;
-      border: 2px solid var(--border);
-      border-top-color: var(--blue-bright);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      vertical-align: middle;
-      margin-right: 8px;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .refresh-btn {
-      background: var(--blue-light);
-      color: var(--blue-bright);
-      border: none;
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 0.75rem;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-      cursor: pointer;
-    }
-  </style>
+/* TABLE CARD */
+.table-card{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(10,31,68,0.07);overflow:hidden;}
+.table-head{background:var(--blue);color:#fff;padding:12px 14px;font-size:0.75rem;font-weight:600;letter-spacing:0.04em;display:flex;justify-content:space-between;align-items:center;}
+.table-head-btns{display:flex;gap:6px;}
+.tbl-btn{background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:7px;padding:5px 11px;font-size:0.72rem;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;}
+.tbl-btn.gold{background:var(--gold);color:var(--blue);}
+.table-scroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:480px;font-size:0.8rem;}
+thead tr{background:var(--light);}
+thead th{padding:9px 11px;text-align:left;font-weight:700;color:var(--mid);font-size:0.72rem;letter-spacing:0.04em;text-transform:uppercase;}
+tbody tr{border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--pale);}
+tbody td{padding:9px 11px;color:var(--blue);}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:0.7rem;font-weight:700;}
+.bm{background:var(--light);color:var(--bright);}
+.bw{background:var(--greenl);color:var(--green);}
+.bv{background:#fef5e7;color:var(--orange);}
+.bf{background:#fef9e7;color:#b7950b;}
+.empty{text-align:center;padding:32px;color:var(--gtext);font-size:0.85rem;}
+.loading-row{text-align:center;padding:32px;color:var(--gtext);font-size:0.85rem;}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--bright);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
 </head>
 <body>
 
-<!-- ===== LOGIN ===== -->
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
-    <span class="login-cross">✝</span>
-    <h1 class="login-title">Leader Dashboard</h1>
-    <p class="login-sub">City Citadel of Grace Family</p>
-    <input type="password" class="login-input" id="passwordInput" placeholder="Enter password" onkeydown="if(event.key==='Enter') login()"/>
-    <button class="login-btn" onclick="login()">Access Dashboard</button>
-    <p class="login-error" id="loginError">⚠️ Incorrect password. Try again.</p>
+    <span class="lc-cross">✝</span>
+    <h1 class="lc-title">Leader Dashboard</h1>
+    <p class="lc-sub">City Citadel of Grace Family</p>
+    <input type="password" class="lc-input" id="pwInput" placeholder="Enter password"/>
+    <button class="lc-btn" id="loginBtn">Access Dashboard</button>
+    <p class="lc-err" id="loginErr">Incorrect password. Try again.</p>
   </div>
 </div>
 
-<!-- ===== DASHBOARD ===== -->
-<div id="dashboard">
-
-  <div class="dash-header">
-    <span class="dash-cross">✝</span>
-    <h1 class="dash-title">Leader Dashboard</h1>
-    <p class="dash-sub">City Citadel of Grace Family</p>
-    <button class="logout-btn" onclick="logout()">Logout</button>
+<!-- DASHBOARD -->
+<div id="dashScreen">
+  <div class="dash-head">
+    <span class="dh-cross">✝</span>
+    <h1 class="dh-title">Leader Dashboard</h1>
+    <p class="dh-sub">City Citadel of Grace Family</p>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
   </div>
 
   <div class="dash-body">
 
     <!-- Stats -->
     <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon">👥</div>
-        <div class="stat-value" id="totalCount">—</div>
-        <div class="stat-label">Total Registered</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🙏</div>
-        <div class="stat-value" id="memberCount">—</div>
-        <div class="stat-label">Members</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">⚙️</div>
-        <div class="stat-value" id="workerCount">—</div>
-        <div class="stat-label">Workers</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🌱</div>
-        <div class="stat-value" id="firstTimerCount">—</div>
-        <div class="stat-label">First Timers</div>
-      </div>
+      <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-val" id="sTotal">—</div><div class="stat-lbl">Total Registered</div></div>
+      <div class="stat-card"><div class="stat-icon">🙏</div><div class="stat-val" id="sMembers">—</div><div class="stat-lbl">Members</div></div>
+      <div class="stat-card"><div class="stat-icon">⚙️</div><div class="stat-val" id="sWorkers">—</div><div class="stat-lbl">Workers</div></div>
+      <div class="stat-card"><div class="stat-icon">🌱</div><div class="stat-val" id="sFirst">—</div><div class="stat-lbl">First Timers</div></div>
     </div>
 
-    <!-- Unit Breakdown -->
-    <p class="section-title">Service Unit Breakdown</p>
-    <div class="units-card" id="unitsCard">
-      <div class="loading"><span class="spinner-inline"></span> Loading units...</div>
-    </div>
+    <!-- Units -->
+    <p class="sec-title">Service Unit Breakdown</p>
+    <div class="units-card" id="unitsCard"><div class="loading-row"><span class="spin"></span>Loading...</div></div>
 
-    <!-- Follow-up List -->
-    <p class="section-title">🌱 New Members Follow-up (Last 30 Days)</p>
-    <div class="table-card" style="margin-bottom:24px;">
-      <div class="table-header">
-        <span id="followupCount">Loading...</span>
-      </div>
+    <!-- Follow Up -->
+    <p class="sec-title">🌱 New Registrations — Last 30 Days</p>
+    <div class="followup-card">
+      <div class="table-head"><span id="followupCount">Loading...</span></div>
       <div class="table-scroll">
         <table>
-          <thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Type</th><th>Registered</th></tr></thead>
-          <tbody id="followupBody">
-            <tr><td colspan="5"><div class="loading"><span class="spinner-inline"></span> Loading...</div></td></tr>
-          </tbody>
+          <thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Type</th><th>Date</th></tr></thead>
+          <tbody id="followupBody"><tr><td colspan="5"><div class="loading-row"><span class="spin"></span>Loading...</div></td></tr></tbody>
         </table>
       </div>
     </div>
 
-    <!-- Members Table -->
-    <p class="section-title">All Registrations</p>
-
-    <!-- Search & Filter Bar -->
-    <div style="background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 12px rgba(10,31,68,0.07);margin-bottom:14px;display:flex;flex-direction:column;gap:10px;">
-      <input type="text" id="searchInput" placeholder="🔍 Search by name..." oninput="filterTable()"
-        style="padding:10px 14px;border:1.5px solid #d4e0f5;border-radius:10px;font-family:DM Sans,sans-serif;font-size:0.88rem;color:#0a1f44;background:#f7f9fc;width:100%;outline:none;"/>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <select id="filterType" onchange="filterTable()"
-          style="flex:1;min-width:130px;padding:9px 12px;border:1.5px solid #d4e0f5;border-radius:10px;font-family:DM Sans,sans-serif;font-size:0.82rem;color:#0a1f44;background:#f7f9fc;outline:none;-webkit-appearance:none;">
+    <!-- Search & Filter -->
+    <p class="sec-title">All Registrations</p>
+    <div class="filter-card">
+      <input type="text" class="filter-input" id="searchInput" placeholder="🔍 Search by name..."/>
+      <div class="filter-row">
+        <select class="filter-select" id="filterType">
           <option value="">All Types</option>
           <option>First Timer</option>
           <option>Regular Visitor</option>
           <option>Member</option>
           <option>Worker</option>
         </select>
-        <select id="filterUnit" onchange="filterTable()"
-          style="flex:1;min-width:130px;padding:9px 12px;border:1.5px solid #d4e0f5;border-radius:10px;font-family:DM Sans,sans-serif;font-size:0.82rem;color:#0a1f44;background:#f7f9fc;outline:none;-webkit-appearance:none;">
+        <select class="filter-select" id="filterUnit">
           <option value="">All Units</option>
           <option>Choir / Music Team</option>
           <option>Instrumentalists / Band</option>
-          <option>Media & Projection</option>
-          <option>Drama & Creative Arts</option>
+          <option>Media &amp; Projection</option>
+          <option>Drama &amp; Creative Arts</option>
           <option>Protocol / Ushering</option>
-          <option>Hospitality & Welfare</option>
-          <option>Decoration & Aesthetics</option>
-          <option>Prayer & Intercession</option>
-          <option>Word & Bible Study</option>
-          <option>Evangelism & Outreach</option>
-          <option>Discipleship & Follow-up</option>
+          <option>Hospitality &amp; Welfare</option>
+          <option>Decoration &amp; Aesthetics</option>
+          <option>Prayer &amp; Intercession</option>
+          <option>Word &amp; Bible Study</option>
+          <option>Evangelism &amp; Outreach</option>
+          <option>Discipleship &amp; Follow-up</option>
           <option>Children's Church / Sunday School</option>
           <option>Youth Ministry</option>
           <option>Women's Ministry</option>
           <option>Men's Ministry</option>
-          <option>Finance & Stewardship</option>
+          <option>Finance &amp; Stewardship</option>
           <option>Security</option>
-          <option>Social Media & Communications</option>
-          <option>Photography & Videography</option>
-          <option>IT & Technical Support</option>
+          <option>Social Media &amp; Communications</option>
+          <option>Photography &amp; Videography</option>
+          <option>IT &amp; Technical Support</option>
         </select>
-        <button onclick="clearFilters()"
-          style="padding:9px 14px;background:#e8f0fe;color:#1e5fd4;border:none;border-radius:10px;font-family:DM Sans,sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;">
-          ✕ Clear
-        </button>
+        <button class="clear-btn" id="clearBtn">✕ Clear</button>
       </div>
     </div>
 
+    <!-- Table -->
     <div class="table-card">
-      <div class="table-header">
+      <div class="table-head">
         <span id="tableCount">Loading...</span>
-        <div style="display:flex;gap:6px;">
-          <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
-          <button class="refresh-btn" onclick="exportPDF()" style="background:#c9a84c;color:#0a1f44;">⬇ Export PDF</button>
+        <div class="table-head-btns">
+          <button class="tbl-btn" id="refreshBtn">↻ Refresh</button>
+          <button class="tbl-btn gold" id="exportBtn">⬇ Export PDF</button>
         </div>
       </div>
       <div class="table-scroll">
-        <table id="membersTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Type</th>
-              <th>Unit</th>
-              <th>Role</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody">
-            <tr><td colspan="7"><div class="loading"><span class="spinner-inline"></span> Loading...</div></td></tr>
-          </tbody>
+        <table>
+          <thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Type</th><th>Unit</th><th>Role</th><th>Date</th></tr></thead>
+          <tbody id="tableBody"><tr><td colspan="7"><div class="loading-row"><span class="spin"></span>Loading...</div></td></tr></tbody>
         </table>
       </div>
     </div>
@@ -533,125 +200,185 @@
 </div>
 
 <script>
-  // ===== CONFIG =====
-  const PASSWORD = "ccg2025";
-  let allData = [];
+var PASSWORD = "ccg2025";
+var CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTjS0CYGXuufT2qEkXZHVKpTlfuWST2F09bcHXcwKvl5QnrqF2t5eR92q3FYPfAh2ZdwlkdesENmRst/pub?gid=0&single=true&output=csv";
+var allData = [];
 
-  // REPLACE with your Google Sheet published CSV URL
-  // (Instructions below on how to get this)
-  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTjS0CYGXuufT2qEkXZHVKpTlfuWST2F09bcHXcwKvl5QnrqF2t5eR92q3FYPfAh2ZdwlkdesENmRst/pub?gid=0&single=true&output=csv";
-
-  // ===== LOGIN =====
-  function login() {
-    const val = document.getElementById('passwordInput').value;
-    if (val === PASSWORD) {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      loadData();
-    } else {
-      document.getElementById('loginError').style.display = 'block';
-      document.getElementById('passwordInput').value = '';
-    }
+// LOGIN
+document.getElementById('loginBtn').addEventListener('click', function() {
+  var val = document.getElementById('pwInput').value;
+  if (val === PASSWORD) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashScreen').style.display = 'block';
+    loadData();
+  } else {
+    document.getElementById('loginErr').style.display = 'block';
+    document.getElementById('pwInput').value = '';
   }
+});
 
-  function logout() {
-    document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('passwordInput').value = '';
-  }
+document.getElementById('pwInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('loginBtn').click();
+});
 
-  // ===== LOAD DATA FROM SHEET =====
-  async function loadData() {
-    try {
-      const res = await fetch(SHEET_CSV_URL);
-      const text = await res.text();
-      const rows = parseCSV(text);
+document.getElementById('logoutBtn').addEventListener('click', function() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('dashScreen').style.display = 'none';
+  document.getElementById('pwInput').value = '';
+});
 
-      if (rows.length < 2) {
-        showEmpty();
-        return;
-      }
+// REFRESH
+document.getElementById('refreshBtn').addEventListener('click', loadData);
 
-      const data = rows.slice(1).filter(r => r[1]); // skip header, skip empty rows
+// SEARCH & FILTER
+document.getElementById('searchInput').addEventListener('input', filterTable);
+document.getElementById('filterType').addEventListener('change', filterTable);
+document.getElementById('filterUnit').addEventListener('change', filterTable);
+document.getElementById('clearBtn').addEventListener('click', function() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('filterType').value = '';
+  document.getElementById('filterUnit').value = '';
+  renderTable(allData);
+});
 
+// EXPORT
+document.getElementById('exportBtn').addEventListener('click', exportPDF);
+
+// LOAD DATA
+function loadData() {
+  fetch(CSV_URL)
+    .then(function(res) { return res.text(); })
+    .then(function(text) {
+      var rows = parseCSV(text);
+      if (rows.length < 2) { showEmpty(); return; }
+      var data = rows.slice(1).filter(function(r) { return r[1] && r[1].trim(); });
       allData = data;
       renderStats(data);
-      renderFollowup(data);
       renderUnits(data);
+      renderFollowup(data);
       renderTable(data);
-
-    } catch (err) {
-      document.getElementById('tableBody').innerHTML =
-        `<tr><td colspan="7"><div class="empty-state">⚠️ Error: ${err.message}. Please check your Sheet CSV URL or refresh.</div></td></tr>`;
-      document.getElementById('tableCount').textContent = 'Error loading data';
-      document.getElementById('unitsCard').innerHTML = '<div class="empty-state">⚠️ Could not load data.</div>';
-      document.getElementById('followupCount').textContent = 'Error';
-      document.getElementById('followupBody').innerHTML = '<tr><td colspan="5"><div class="empty-state">⚠️ Could not load data.</div></td></tr>';
-    }
-  }
-
-  // ===== PARSE CSV =====
-  function parseCSV(text) {
-    return text.split('\n').map(row => {
-      const result = [];
-      let current = '';
-      let inQuotes = false;
-      for (let i = 0; i < row.length; i++) {
-        if (row[i] === '"') { inQuotes = !inQuotes; }
-        else if (row[i] === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
-        else { current += row[i]; }
-      }
-      result.push(current.trim());
-      return result;
+    })
+    .catch(function(err) {
+      document.getElementById('tableBody').innerHTML = '<tr><td colspan="7"><div class="empty">Could not load data: ' + err.message + '</div></td></tr>';
+      document.getElementById('tableCount').textContent = 'Error';
     });
-  }
+}
 
-  // ===== RENDER STATS =====
-  function renderStats(data) {
-    const total = data.length;
-    const members = data.filter(r => r[4] === 'Member').length;
-    const workers = data.filter(r => r[4] === 'Worker').length;
-    const firstTimers = data.filter(r => r[4] === 'First Timer').length;
-
-    document.getElementById('totalCount').textContent = total;
-    document.getElementById('memberCount').textContent = members;
-    document.getElementById('workerCount').textContent = workers;
-    document.getElementById('firstTimerCount').textContent = firstTimers;
-  }
-
-  // ===== RENDER UNITS =====
-  function renderUnits(data) {
-    const units = [
-      'Choir / Music Team', 'Instrumentalists / Band', 'Media & Projection',
-      'Drama & Creative Arts', 'Protocol / Ushering', 'Hospitality & Welfare',
-      'Decoration & Aesthetics', 'Prayer & Intercession', 'Word & Bible Study',
-      'Evangelism & Outreach', 'Discipleship & Follow-up',
-      "Children's Church / Sunday School", 'Youth Ministry', "Women's Ministry",
-      "Men's Ministry", 'Finance & Stewardship', 'Security',
-      'Social Media & Communications', 'Photography & Videography', 'IT & Technical Support'
-    ];
-
-    const counts = {};
-    units.forEach(u => counts[u] = 0);
-    data.forEach(r => { if (counts[r[5]] !== undefined) counts[r[5]]++; });
-
-    const max = Math.max(...Object.values(counts), 1);
-    const active = units.filter(u => counts[u] > 0);
-
-    if (active.length === 0) {
-      document.getElementById('unitsCard').innerHTML = '<div class="empty-state">No unit assignments yet.</div>';
-      return;
+// PARSE CSV
+function parseCSV(text) {
+  return text.split('\n').map(function(row) {
+    var result = [], current = '', inQ = false;
+    for (var i = 0; i < row.length; i++) {
+      if (row[i] === '"') { inQ = !inQ; }
+      else if (row[i] === ',' && !inQ) { result.push(current.trim()); current = ''; }
+      else { current += row[i]; }
     }
+    result.push(current.trim());
+    return result;
+  });
+}
 
-    let html = '';
-    active.sort((a, b) => counts[b] - counts[a]).forEach(u => {
-      const pct = Math.round((counts[u] / max) * 100);
-      html += `
-        <div class="unit-row">
-          <div class="unit-name">${u}</div>
-          <div class="unit-bar-wrap"><div class="unit-bar" style="width:${pct}%"></div></div>
-          <div class="unit-count">${counts[u]}</div>
-        </div>`;
-    });
+// RENDER STATS
+function renderStats(data) {
+  document.getElementById('sTotal').textContent = data.length;
+  document.getElementById('sMembers').textContent = data.filter(function(r){return r[4]==='Member';}).length;
+  document.getElementById('sWorkers').textContent = data.filter(function(r){return r[4]==='Worker';}).length;
+  document.getElementById('sFirst').textContent = data.filter(function(r){return r[4]==='First Timer';}).length;
+}
 
-    document.getElementById('unitsCard').innerHTML = html;
+// RENDER UNITS
+function renderUnits(data) {
+  var units = ['Choir / Music Team','Instrumentalists / Band','Media & Projection','Drama & Creative Arts','Protocol / Ushering','Hospitality & Welfare','Decoration & Aesthetics','Prayer & Intercession','Word & Bible Study','Evangelism & Outreach','Discipleship & Follow-up',"Children's Church / Sunday School",'Youth Ministry',"Women's Ministry","Men's Ministry",'Finance & Stewardship','Security','Social Media & Communications','Photography & Videography','IT & Technical Support'];
+  var counts = {};
+  units.forEach(function(u){counts[u]=0;});
+  data.forEach(function(r){if(counts[r[5]]!==undefined)counts[r[5]]++;});
+  var active = units.filter(function(u){return counts[u]>0;});
+  if (!active.length) { document.getElementById('unitsCard').innerHTML='<div class="empty">No unit assignments yet.</div>'; return; }
+  var max = Math.max.apply(null, active.map(function(u){return counts[u];}));
+  var html = '';
+  active.sort(function(a,b){return counts[b]-counts[a];}).forEach(function(u) {
+    var pct = Math.round(counts[u]/max*100);
+    html += '<div class="unit-row"><div class="unit-name">'+u+'</div><div class="unit-bar-bg"><div class="unit-bar-fill" style="width:'+pct+'%"></div></div><div class="unit-cnt">'+counts[u]+'</div></div>';
+  });
+  document.getElementById('unitsCard').innerHTML = html;
+}
+
+// RENDER FOLLOWUP
+function renderFollowup(data) {
+  var now = new Date();
+  var cutoff = new Date(now.getTime() - 30*24*60*60*1000);
+  var recent = data.filter(function(r) {
+    var ds = r[8]||r[0]; if(!ds) return false;
+    var p = ds.split('/'); var d;
+    if(p.length===3){d=new Date(p[2]+'-'+p[1].padStart(2,'0')+'-'+p[0].padStart(2,'0'));}
+    else{d=new Date(ds);}
+    return !isNaN(d)&&d>=cutoff;
+  });
+  document.getElementById('followupCount').textContent = recent.length + ' New Registration' + (recent.length!==1?'s':'') + ' in Last 30 Days';
+  if (!recent.length) { document.getElementById('followupBody').innerHTML='<tr><td colspan="5"><div class="empty">No new registrations in the last 30 days.</div></td></tr>'; return; }
+  var bmap = {'Member':'bm','Worker':'bw','Regular Visitor':'bv','First Timer':'bf'};
+  var html='';
+  recent.forEach(function(r,i){
+    var cls=bmap[r[4]]||'bm';
+    html+='<tr><td>'+(i+1)+'</td><td><strong>'+(r[1]||'—')+'</strong></td><td>'+(r[2]||'—')+'</td><td><span class="badge '+cls+'">'+(r[4]||'—')+'</span></td><td>'+(r[8]||'—')+'</td></tr>';
+  });
+  document.getElementById('followupBody').innerHTML = html;
+}
+
+// RENDER TABLE
+function renderTable(data) {
+  document.getElementById('tableCount').textContent = data.length + ' Registration' + (data.length!==1?'s':'');
+  if (!data.length) { document.getElementById('tableBody').innerHTML='<tr><td colspan="7"><div class="empty">No registrations found.</div></td></tr>'; return; }
+  var bmap = {'Member':'bm','Worker':'bw','Regular Visitor':'bv','First Timer':'bf'};
+  var html='';
+  data.forEach(function(r,i){
+    var cls=bmap[r[4]]||'bm';
+    html+='<tr><td>'+(i+1)+'</td><td><strong>'+(r[1]||'—')+'</strong></td><td>'+(r[2]||'—')+'</td><td><span class="badge '+cls+'">'+(r[4]||'—')+'</span></td><td>'+(r[5]||'—')+'</td><td>'+(r[6]||'—')+'</td><td>'+(r[8]||'—')+'</td></tr>';
+  });
+  document.getElementById('tableBody').innerHTML = html;
+}
+
+// FILTER TABLE
+function filterTable() {
+  var search = document.getElementById('searchInput').value.toLowerCase();
+  var type = document.getElementById('filterType').value;
+  var unit = document.getElementById('filterUnit').value;
+  var filtered = allData.filter(function(r) {
+    var nm = (r[1]||'').toLowerCase();
+    return (!search||nm.includes(search)) && (!type||r[4]===type) && (!unit||r[5]===unit);
+  });
+  renderTable(filtered);
+}
+
+// SHOW EMPTY
+function showEmpty() {
+  ['sTotal','sMembers','sWorkers','sFirst'].forEach(function(id){document.getElementById(id).textContent='0';});
+  document.getElementById('unitsCard').innerHTML='<div class="empty">No registrations yet.</div>';
+  document.getElementById('tableBody').innerHTML='<tr><td colspan="7"><div class="empty">No registrations yet.</div></td></tr>';
+  document.getElementById('tableCount').textContent='0 Registrations';
+  document.getElementById('followupCount').textContent='0 New Registrations';
+  document.getElementById('followupBody').innerHTML='<tr><td colspan="5"><div class="empty">No registrations yet.</div></td></tr>';
+}
+
+// EXPORT PDF
+function exportPDF() {
+  if (!allData.length) { alert('No data to export.'); return; }
+  var bmap = {'Member':'background:#e8f0fe;color:#1e5fd4','Worker':'background:#e6f7f0;color:#1a8a5a','Regular Visitor':'background:#fef5e7;color:#e67e22','First Timer':'background:#fef9e7;color:#b7950b'};
+  var rows = '';
+  allData.forEach(function(r,i){
+    var s=bmap[r[4]]||'background:#e8f0fe;color:#1e5fd4';
+    rows+='<tr style="background:'+(i%2===0?'#fff':'#f0f5ff')+'"><td>'+(i+1)+'</td><td><b>'+(r[1]||'')+'</b></td><td>'+(r[2]||'')+'</td><td><span style="padding:2px 8px;border-radius:10px;font-size:10px;font-weight:bold;'+s+'">'+(r[4]||'')+'</span></td><td>'+(r[5]||'')+'</td><td>'+(r[6]||'')+'</td><td>'+(r[8]||'')+'</td></tr>';
+  });
+  var win = window.open('','_blank');
+  win.document.write('<!DOCTYPE html><html><head><title>CCG Members</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#0a1f44}h2{margin-bottom:4px}p{font-size:11px;color:#666;margin-bottom:14px}table{width:100%;border-collapse:collapse;font-size:11px}th{background:#0a1f44;color:#fff;padding:7px 10px;text-align:left}td{padding:6px 10px;border-bottom:1px solid #d4e0f5}</style></head><body>');
+  win.document.write('<h2>City Citadel of Grace Family — Members List</h2>');
+  win.document.write('<p>Generated: '+new Date().toLocaleDateString('en-NG')+' | Total: '+allData.length+'</p>');
+  win.document.write('<table><thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Type</th><th>Unit</th><th>Role</th><th>Date</th></tr></thead><tbody>'+rows+'</tbody></table>');
+  win.document.write('</body></html>');
+  win.document.close();
+  setTimeout(function(){win.print();},600);
+}
+</script>
+
+</body>
+</html>
