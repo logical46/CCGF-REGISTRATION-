@@ -574,6 +574,7 @@
 
       const data = rows.slice(1).filter(r => r[1]); // skip header, skip empty rows
 
+      allData = data;
       renderStats(data);
       renderFollowup(data);
       renderUnits(data);
@@ -581,7 +582,11 @@
 
     } catch (err) {
       document.getElementById('tableBody').innerHTML =
-        `<tr><td colspan="7"><div class="empty-state">⚠️ Could not load data. Make sure your Sheet CSV URL is set correctly.</div></td></tr>`;
+        `<tr><td colspan="7"><div class="empty-state">⚠️ Error: ${err.message}. Please check your Sheet CSV URL or refresh.</div></td></tr>`;
+      document.getElementById('tableCount').textContent = 'Error loading data';
+      document.getElementById('unitsCard').innerHTML = '<div class="empty-state">⚠️ Could not load data.</div>';
+      document.getElementById('followupCount').textContent = 'Error';
+      document.getElementById('followupBody').innerHTML = '<tr><td colspan="5"><div class="empty-state">⚠️ Could not load data.</div></td></tr>';
     }
   }
 
@@ -650,17 +655,3 @@
     });
 
     document.getElementById('unitsCard').innerHTML = html;
-  }
-
-  // ===== RENDER TABLE =====
-  function renderTable(data) {
-    document.getElementById('tableCount').textContent = `${data.length} Registration${data.length !== 1 ? 's' : ''}`;
-
-    if (data.length === 0) {
-      document.getElementById('tableBody').innerHTML =
-        `<tr><td colspan="7"><div class="empty-state">No registrations yet.</div></td></tr>`;
-      return;
-    }
-
-    const badgeClass = {
-      'Member': 'bad
